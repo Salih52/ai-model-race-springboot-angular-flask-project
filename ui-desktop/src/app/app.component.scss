@@ -1,0 +1,42 @@
+.navbar {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    z-index: 1;
+  }
+  
+  .navbar-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .navbar .imgg {
+    height: 70px; /* Logonun boyutunu artırmak için yüksekliği artırın */
+    position: relative;
+    top: -1px; /* Logoyu navbardan yukarı ve aşağı taşırmak için negatif bir üst marj kullanın */
+    z-index: 2;
+  }
+
+  .dropdown-menu {
+    background-color: #343a40; /* Gri arka plan rengi */
+    color:#fff ;
+    border: none; /* Kenarlık yok */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Hafif bir gölgelendirme */
+    font-size: 14px; /* Yazı boyutunu küçültmek */
+    padding: 0.5rem 0; /* Alanın iç boşluğunu ayarlamak */
+  }
+  
+  .dropdown-menu a {
+    color: #fff; /* Beyaz yazı rengi */
+    font-size: 0.9rem; /* Yazı boyutunu küçültmek */
+  }
+  /* Aktif durumdayken dropdown menüsünü göstermek için */
+  .nav-item.dropdown.show .dropdown-menu {
+    display: block;
+  }
+  
+  .navbar-nav .nav-item-login:hover .nav-link {
+    transform: scale(1.1); /* Büyütme efekti */
+    background-color: #007bff; /* Değiştirilecek arka plan rengi */
+  }

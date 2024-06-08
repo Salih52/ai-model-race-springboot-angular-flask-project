@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  ui-desktop:
+    build: ./ui-desktop
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+      - python
+    networks:
+      - network
+
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+    depends_on:
+      - db
+    volumes:
+      - ./uploads:/uploads
+    networks:
+      - network
+
+  python:
+    build: ./python
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - network
+    volumes:
+      - ./uploads:/uploads
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+    networks:
+      - network
+
+networks:
+  network:

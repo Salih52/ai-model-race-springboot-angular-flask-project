@@ -1,0 +1,33 @@
+<header class="d-flex justify-content-between align-items-center my-4">
+  <h1>Model Yükleyen Öğrenciler</h1>
+  <button class="btn btn-info" (click)="exportExcel()">Excele Dönüştür</button>
+</header>
+
+<div *ngIf="scoreList.length != 0; else noScoreList">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Öğrenci No</th>
+        <th>Accuracy</th>
+        <th>F1 Score</th>
+        <th>Precision</th>
+        <th>Recall</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of scoreList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ user.studentNo }}</td>
+        <td>{{ user.accuracy }}</td>
+        <td>{{ user.f1Score }}</td>
+        <td>{{ user.precision }}</td>
+        <td>{{ user.recall }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noScoreList>
+  <h1>Henüz Model Yükleyen Öğrenci Bulunmamaktadır...</h1>
+</ng-template>

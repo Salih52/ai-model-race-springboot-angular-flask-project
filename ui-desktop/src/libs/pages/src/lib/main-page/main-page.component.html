@@ -1,0 +1,85 @@
+<!-- Navigation -->
+
+
+
+<main role="main" class="main">
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron jumbotron-fluid bg-dark text-white">
+    <div class="container text-center">
+      <h1 class="display-3">Ai-Lab 'a Hoşgeldin</h1>
+      <p class="lead">
+        Burda olan yarışmalardan birine katılabilir, daha önceki yarışmaları görüntüleyebilirsin. Yarışmaların amacı, verilen data seti ile kendi modelini eğitip sisteme yüklemek. Sistem, modelini farklı bir data-set ile test edip F1 Score, Accuracy, Recall ve Precision skorlarını çıkartıp seni kaydedecek. Yarışmalarda sıralamalar F1 Score'a göre olacak. Şimdiden iyi yarışmalar ve başarılar...
+      </p>
+      <a class="btn btn-info btn-lg mt-3" target=”_blank” href="https://ktunailab.com/" role="button">Ai-Lab Hakkında Daha Fazla Biligi İçin »</a>
+    </div>
+  </div>
+
+  <!-- bazı yarışma örnekleri -->
+  <div class="container">
+    <div class="row justify-content-center" *ngIf="assigns.length > 0; else noAssign">
+      <section class="wrapper">
+        <div class="container">
+          <div class="row">
+            <div class="col text-center mb-5">
+              <h1 class="display-4 font-weight-bolder">
+                Şuan Aktif Olan Yarışmalarımız
+              </h1>
+              <p class="lead">
+                Yarışmalar için daha fazla bilgi almak ve modelinizi yüklemek için sitemize giriş yapabilirsiniz.
+              </p>
+            </div>
+          </div>
+          <div class="scroll-container">
+            <div class="scroll-wrapper" #scrollableRow>
+              <ng-container *ngFor="let item of activeAssigns">
+                <ng-container *ngTemplateOutlet="assign; context: { name: item }"></ng-container>
+              </ng-container>
+            </div>
+            <div class="nav-arrow left" (click)="scrollLeft()">
+              &#9664;
+            </div>
+            <div class="nav-arrow right" (click)="scrollRight()">
+              &#9654;
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  </main>
+  
+  <footer class="container">
+    <p class="text-white">© Ai-Lab 2017-2018 </p>
+  </footer>
+  
+  <ng-template #assign let-name="name">
+    <div [routerLink]="['/assigns/' + name.title]" class="col-sm-12 col-md-6 col-lg-4 mb-4">
+      <div
+        class="card text-dark card-has-bg click-col" 
+      >
+        <div class="card-img-overlay d-flex flex-column">
+          <div class="card-body">
+            <small class="card-meta mb-2">{{name.title}}</small>
+            <h4 class="card-title mt-4">
+              <a class="text-dark" href="#">
+                {{name.subtitle}}
+              </a>
+            </h4>
+            
+          </div>
+          <div class="card-footer">
+            <small><i class="far fa-clock"></i> {{name.startDate | date: 'dd/MM/yyyy'}} - 
+              {{name.endDate | date: 'dd/MM/yyyy'}}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
+  
+  
+
+<ng-template #noAssign>
+  <h1 class="text-white">Aktif Bir Yarışma Yok</h1>
+</ng-template>
+

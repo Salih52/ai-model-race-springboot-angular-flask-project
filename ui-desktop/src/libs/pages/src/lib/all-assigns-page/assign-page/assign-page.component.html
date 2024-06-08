@@ -1,0 +1,46 @@
+<div class="container body d-flex justify-content-between">
+    <div class="card content" *ngIf="assigns">
+        <div class="card-header">
+            <h1 class="title">{{assigns.title}}</h1>
+            <div class="d-flex justify-content-between" *ngIf="assigns.status == 'active' ">
+                <h3>{{assigns.startDate | date: 'dd/MM/yyyy'}} - 
+                {{assigns.endDate | date: 'dd/MM/yyyy'}}</h3>
+                <h2  class="text-success">Yarışma Devam Etmektedir</h2>
+            </div>
+            <div class="d-flex justify-content-center" *ngIf="assigns.status == 'inactive' ">
+                <h2  class="text-danger">Yarışma Bitmiştir</h2>
+            </div>
+        </div>
+        <div class="card-body">
+            
+            <h2>{{assigns.subtitle}}</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{assigns.description}}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="card files mt-3">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li *ngFor="let file of fileInfos" class="list-group-item">
+                        <a href="{{ file.url }}">{{ file.name }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isLogin" class="buttons">
+        <div class="card bg-transparent">
+            <div *ngIf="assigns?.status == 'active'" class="card-header border-warning">
+                <h4 class="text-white">Model Yükleyebeilmek için giriş yapınız...</h4>
+            </div>  
+                <button *ngIf="assigns?.status == 'active'" class="btn btn-lg btn-info mt-4" [routerLink]="['/login']">Login</button>
+                <button  *ngIf="assigns?.status == 'inactive'"  (click)="showResults()" class="btn btn-lg btn-success mt-4" >Sonuçları Göster</button>
+        </div>
+    </div>
+
+</div>
+

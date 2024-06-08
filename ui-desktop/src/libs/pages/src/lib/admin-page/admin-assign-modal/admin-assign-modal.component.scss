@@ -1,0 +1,43 @@
+
+.body {
+    width: 100%;
+    margin-top: 100px;
+}
+
+.content{
+    margin-left: 3%;
+    width: 900px;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+}
+
+.card.files .list-group-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-primary {
+    background-color: rgba(0, 21, 100, 0.8);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: rgba(0, 21, 100, 1);
+}
+
+.title {
+    text-align: center;
+}
+
+.toolBox{
+    margin-left: 50px;
+    width: 250px;
+}
+
+.noLayout{
+    background-color:none;
+}

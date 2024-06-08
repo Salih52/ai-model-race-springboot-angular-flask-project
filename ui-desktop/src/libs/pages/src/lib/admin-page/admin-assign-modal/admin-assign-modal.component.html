@@ -1,0 +1,47 @@
+<div class="container body d-flex justify-content-between">
+    <div class="card content">
+        <div class="card-header">
+            <h1 class="title">{{assign?.title}}</h1>
+            <div class="d-flex justify-content-between" *ngIf="assign?.status == 'active' ">
+                <h3>{{assign?.startDate | date: 'dd/MM/yyyy'}} - 
+                {{assign?.endDate | date: 'dd/MM/yyyy'}}</h3>
+                <h2  class="text-success">Yarışma Devam Etmektedir</h2>
+            </div>
+            <div class="d-flex justify-content-center" *ngIf="assign?.status == 'inactive' ">
+                <h2  class="text-danger">Yarışma Bitmiştir</h2>
+            </div>
+            
+        </div>
+        <div class="card-body">
+            
+            <h2>{{assign?.subtitle}}</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{assign?.description}}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="card files mt-3">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li *ngFor="let file of fileInfos" class="list-group-item">
+                        <a href="{{ file.url }}">{{ file.name }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="toolBox">
+        <div class="card bg-transparent">
+            <button class="card-body btn btn-info" (click)="openModal()">Öğrenci Listesi</button>
+            <button class="card-body btn btn-primary mt-2" (click)="updateAssign()">Düzenle</button>
+            <button class="card-body btn btn-warning mt-2" (click)="confirmEnd()">Yarışmayı Bitir</button>
+            <button class="card-body btn btn-danger mt-2" (click)="confirmDelete()">Yarışmayı Sil</button>  
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,85 @@
+
+.body {
+  width: 100%;
+  margin-top: 100px;
+}
+
+.content{
+  width: 750px;
+  height: 500px;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+}
+
+.card.files .list-group-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-primary {
+  background-color: rgba(0, 21, 100, 0.8);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: rgba(0, 21, 100, 1);
+}
+
+.title {
+  text-align: center;
+}
+
+.noLayout{
+  background-color:none;
+}
+.buttons {
+  width: 240px;   
+  margin-right: 50px;
+}
+
+.file-label {
+  cursor: pointer;
+  background-color: #1769bc;
+  color: #f2f6f9;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  padding: .375rem .75rem;
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.file-label:hover {
+  background-color: #ecf0f4;
+  color: #667d9a;
+}
+
+
+.upload{
+  cursor: pointer;
+  background-color: #bcbc17;
+  color: #f2f6f9;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  padding: .375rem .75rem;
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s;}
+
+  .upload:hover {
+    background-color: #ecf0f4;
+    color: #667d9a;
+  }
+
+.inactive{
+  pointer-events: none;
+    opacity: 0.1;
+}
+
+.active{
+  pointer-events: auto;
+    opacity: 1;
+  background-color: #bcbc17;
+}

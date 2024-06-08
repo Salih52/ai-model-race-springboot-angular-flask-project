@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary static-top">
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/mainPage']">
+      <img src="./assets/V2.png" alt="..." height="10" class="imgg">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" [routerLink]="['/mainPage']">Ana Sayfa</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/assigns']">Yarışmalar</a>
+        </li>
+        <!-- <li class="nav-item dropdown" (mouseenter)="openDropdown()" (mouseleave)="closeDropdown()">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" [class.show]="isDropdownOpen">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li> -->
+      </ul>
+      <div *ngIf="!isLogin else loggedIn">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item-login">
+            <a class="nav-link" [routerLink]="['/login']">Giriş Yap</a>
+          </li>
+          <li class="nav-item-login">
+            <a class="ml-3 nav-link" [routerLink]="['/register']">Kayıt Ol</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div [ngStyle]="{
+    'background-image': 'linear-gradient(to bottom, #001464, #000000)',
+    'min-height': '100vh',
+    'width': '100%',
+    'position': 'absolute'
+  }">
+    <router-outlet></router-outlet>
+  </div>
+
+
+  <ng-template #loggedIn let-name>
+    <ul class="navbar-nav ms-auto d-flex align-items-center justify-content-center">
+        <li class="nav-item-login">
+          <button class="btn btn-info" *ngIf="user?.role" [routerLink]="['/login']">
+            {{ user?.role === 'ADMIN' ? 'Admin Page' : 'Yarışmalarım' }}
+          </button>
+        </li>
+        <li class="nav-item-login ml-3">
+            <button class="btn  btn-danger" (click)="logout()">Çıkış Yap</button>
+        </li>
+        <li class="ml-3 d-flex align-items-center"> 
+            <span class="text-uppercase text-white nav-item">{{user?.firstName}}</span>
+            <span class="text-uppercase text-white nav-item ml-1">{{user?.lastName}}</span>
+        </li>
+    </ul>
+</ng-template>

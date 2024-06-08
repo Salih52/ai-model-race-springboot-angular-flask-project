@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="backend" type="docker-compose" uuid="9f329931-3dfd-475d-9b80-3cbb068e7270">
+        <config>
+          <option name="targetPlatform">
+            <TargetPlatform />
+          </option>
+          <option name="configurationFiles">
+            <list>
+              <option value="C:\Users\salih\Desktop\project\docker-compose.yml" />
+            </list>
+          </option>
+          <option name="envs">
+            <map>
+              <entry key="SPRING_DATASOURCE_PASSWORD" value="1234" />
+              <entry key="SPRING_DATASOURCE_URL" value="jdbc:postgresql://db:5432/postgres" />
+              <entry key="SPRING_DATASOURCE_USERNAME" value="postgres" />
+            </map>
+          </option>
+          <option name="projectName" value="rest" />
+          <option name="serviceName" value="backend" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="homePath" value="/usr/java/openjdk-17" />
+            <option name="javaVersionString" value="17.0.2" />
+          </config>
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
