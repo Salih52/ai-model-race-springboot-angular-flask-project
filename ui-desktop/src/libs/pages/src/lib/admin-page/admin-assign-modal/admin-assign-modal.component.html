@@ -37,7 +37,7 @@
         <div class="card bg-transparent">
             <button class="card-body btn btn-info" (click)="openModal()">Öğrenci Listesi</button>
             <button class="card-body btn btn-primary mt-2" (click)="updateAssign()">Düzenle</button>
-            <button class="card-body btn btn-warning mt-2" (click)="confirmEnd()">Yarışmayı Bitir</button>
+            <button class="card-body btn btn-warning mt-2" *ngIf="assign?.status == 'active'" (click)="confirmEnd()">Yarışmayı Bitir</button>
             <button class="card-body btn btn-danger mt-2" (click)="confirmDelete()">Yarışmayı Sil</button>  
         </div>
     </div>

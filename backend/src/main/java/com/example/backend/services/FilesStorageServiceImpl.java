@@ -95,7 +95,7 @@ public class FilesStorageServiceImpl implements FileStorageService {
 
             Files.copy(file.getInputStream(), userWithTitleDir.resolve(Objects.requireNonNull(originalFilename)));
 
-            User user = userRepository.findBySchoolNo(studentNo);
+            User user = userRepository.findBySchoolNo(studentNo).orElseThrow();
             Assign assign = assignRepository.getAssignByTitle(assignTitle);
 
             // Ensure the user's assignments list is initialized

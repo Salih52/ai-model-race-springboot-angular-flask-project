@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentAssignDto {
-    private String studentName;
+public class UserDto {
+    private String firstName;
+    private String lastName;
     private String schoolNo;
+    private String email;
 }

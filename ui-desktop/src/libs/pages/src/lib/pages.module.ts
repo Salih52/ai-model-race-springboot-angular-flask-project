@@ -16,6 +16,7 @@ import { AdminAssignModalComponent } from './admin-page/admin-assign-modal/admin
 import { AllAssignsPageComponent } from './all-assigns-page/all-assigns-page.component';
 import { AssignPageComponent } from './all-assigns-page/assign-page/assign-page.component';
 import { ResultsPageComponent } from './all-assigns-page/assign-page/results-page/results-page.component';
+import { ShowUsersModalComponent } from './admin-page/show-users-modal/show-users-modal.component';
 
 
 
@@ -36,6 +37,7 @@ import { ResultsPageComponent } from './all-assigns-page/assign-page/results-pag
     AllAssignsPageComponent,
     AssignPageComponent,
     ResultsPageComponent,
+    ShowUsersModalComponent,
   ],
   imports: [
     FormsModule,

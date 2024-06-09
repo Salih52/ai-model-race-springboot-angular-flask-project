@@ -15,11 +15,18 @@ export class RegisterPageComponent {
     private routing:Router
   ) { }
 
-  onSubmit(form:NgForm){
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      Object.keys(form.controls).forEach(field => {
+        const control = form.control.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+      return;
+    }
     this.service.register(form.value).subscribe(
-      (response) => console.log(response),
-      (error) => console.log(error)
-    )
-      this.routing.navigate(["/login"])
+      response => alert("Kayıt başarılı"),
+      error => alert("Kayıt başarısız,Email veya Okul no kullanılmış olabilir.")
+    );
+    this.routing.navigate(["/login"]);
   }
 }

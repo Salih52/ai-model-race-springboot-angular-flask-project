@@ -6,6 +6,7 @@ import { AuthResponse } from 'src/models/authResponse';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { UserModel } from 'src/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +45,10 @@ export class VeriService{
           this.cookieService.set('jwtToken',response.access_token);
         })
       );
+  }
+
+  public getAllUsers(){
+    return this.http.get<UserModel[]>(`${this.url}/getUsers`);
   }
 
   logout() {

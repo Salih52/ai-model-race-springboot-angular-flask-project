@@ -10,6 +10,8 @@ import { AssignModel } from 'src/models/assignModel';
 import { AssignService } from 'src/services/assign.service';
 import { AssignModalComponent } from './admin-assign-modal/assign-modal/assign-modal.component';
 import { AdminAssignModalComponent } from './admin-assign-modal/admin-assign-modal.component';
+import { UserModel } from 'src/models/user';
+import { ShowUsersModalComponent } from './show-users-modal/show-users-modal.component';
 
 @Component({
   selector: 'app-admin-page',
@@ -19,6 +21,7 @@ import { AdminAssignModalComponent } from './admin-assign-modal/admin-assign-mod
 export class AdminPageComponent implements OnInit{
 
   public assigns:AssignModel[]= [];
+  public users:UserModel[] = [];
 
   constructor(
     private dialogRef:MatDialog,
@@ -65,5 +68,15 @@ export class AdminPageComponent implements OnInit{
 
   logout(){
     this.authService.logout();
+  }
+
+  showUsers(){
+    this.authService.getAllUsers().subscribe(data => {
+      this.users = data;
+      this.dialogRef.open(ShowUsersModalComponent ,{
+        width:'800px',
+        height:'500px'
+      })
+    });
   }
 }

@@ -19,14 +19,14 @@ const routes: Routes = [
   { 
     path: 'admin' , 
     component:AdminPageComponent,
-    
+    canActivate: [AuthGuard],
     // children:[
     //   {path: ':assignName',component:AdminAssignModalComponent}
     // ]
   },
   { path: 'mainPage', component: MainPageComponent},
   {path: 'userPage/:assignName', component:UserAssignModalComponent, canActivate: [AuthGuard]},
-  {path: 'admin/:assignName', component:AdminAssignModalComponent , },
+  {path: 'admin/:assignName', component:AdminAssignModalComponent , canActivate: [AuthGuard]},
   {path:'assigns' , component:AllAssignsPageComponent},
   {path:'assigns/:assignName' , component:AssignPageComponent},
   { path: '', redirectTo: '/mainPage', pathMatch: 'full' }

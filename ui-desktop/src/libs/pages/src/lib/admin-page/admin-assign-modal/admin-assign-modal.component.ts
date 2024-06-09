@@ -74,7 +74,7 @@ export class AdminAssignModalComponent {
       if(this.assign?.title)
       this.assignService.endAssign(this.assign?.title).subscribe(data => {
         alert("Yarışma bitirildi.")
-        console.log(data);
+        window.location.reload();
       });
     }
   }

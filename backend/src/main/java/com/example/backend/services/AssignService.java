@@ -58,7 +58,7 @@ public class AssignService {
     }
 
     public Set<Assign> getUserAssignmentsBySchoolNo(String schoolNo) {
-        User user = userRepository.findBySchoolNo(schoolNo);
+        User user = userRepository.findBySchoolNo(schoolNo).orElseThrow();
         if (user == null) {
             throw new RuntimeException("User not found with school number: " + schoolNo);
         }
