@@ -51,10 +51,10 @@ export class NewAssignComponent {
 
   upload(): void {
     this.progress = 0;
-    if (this.selectedFiles && this.selectedTestFile) {
-
-        this.fileService.upload(this.selectedFiles,this.selectedTestFile,this.titleee).subscribe({
+    if (this.selectedTestFile) {
+        this.fileService.upload(this.selectedTestFile,this.titleee , this.selectedFiles).subscribe({
           next: (event: any) => {
+            console.log('dosya yükleme');
             if (event.type === HttpEventType.UploadProgress) {
               this.progress = Math.round(100 * event.loaded / event.total);
             } else if (event instanceof HttpResponse) {

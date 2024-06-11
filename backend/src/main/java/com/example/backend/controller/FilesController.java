@@ -37,7 +37,7 @@ public class FilesController {
     private final AssignService assignService;
 
     @PostMapping("/uploadAdmin")
-    public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam(value = "file") MultipartFile[] files ,
+    public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam(value = "file" , required = false) MultipartFile[] files ,
                                                        @RequestParam(value = "title") String title,
                                                        @RequestParam(value = "testFile") MultipartFile[] testFile) {
         String message = "";
@@ -45,14 +45,24 @@ public class FilesController {
             List<String> fileNames = new ArrayList<>();
 
             storageService.createDirectory(title);
-            Arrays.asList(files).stream().forEach(file -> {
-                storageService.save(file,title);
-                fileNames.add(file.getOriginalFilename());
-            });
+
+            if (files != null) {
+                Arrays.asList(files).stream().forEach(file -> {
+                    storageService.save(file, title);
+                    fileNames.add(file.getOriginalFilename());
+                });
+            }
+
             Arrays.asList(testFile).stream().forEach(file -> {
-                storageService.uploadTestFile(file,title);
+                storageService.uploadTestFile(file, title);
             });
-            message = "Uploaded the files successfully: " + fileNames;
+
+            if (!fileNames.isEmpty()) {
+                message = "Uploaded the files successfully: " + fileNames;
+            } else {
+                message = "No files to upload, but test files uploaded successfully.";
+            }
+
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Fail to upload files!";
@@ -196,7 +206,7 @@ public class FilesController {
 
         try {
             // Flask API'den gelen sonucu döndürme
-            String flaskApiUrl = "http://127.0.0.1:5000/veriAl"; //local için "http://127.0.0.1:5000/veriAl" , docker için "http://python:5000/veriAl"
+            String flaskApiUrl = "http://python:5000/veriAl"; //local için "http://127.0.0.1:5000/veriAl" , docker için "http://python:5000/veriAl"
             return restTemplate.postForObject(flaskApiUrl, request, String.class);
         } catch (RestClientException e) {
             // Hata durumunda loglama ve uygun yanıt döndürme

@@ -13,17 +13,18 @@ export class FileService {
     this.baseUrl = "http://localhost:8080/files";
   }
 
-  upload(file: FileList, testFile:FileList ,title:string): Observable<HttpEvent<any>> {
-    console.log("odev: "+file,"test: "+testFile,"title: "+title);
+  upload(testFile: FileList, title: string, file?: FileList): Observable<HttpEvent<any>> {
+    console.log("odev: " + file, "test: " + testFile, "title: " + title);
     const formData: FormData = new FormData();
 
-    if(file.length > 0){
-      for(let i = 0; i < file.length; i++){
+    if (file && file.length > 0) {
+      for (let i = 0; i < file.length; i++) {
         formData.append('file', file[i]);
       }
     }
-    if(testFile.length > 0){
-      for(let i = 0; i < testFile.length; i++){
+
+    if (testFile.length > 0) {
+      for (let i = 0; i < testFile.length; i++) {
         formData.append('testFile', testFile[i]);
       }
     }
@@ -36,7 +37,7 @@ export class FileService {
     });
 
     return this.http.request(req);
-  }
+}
 
 
 

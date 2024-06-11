@@ -27,8 +27,9 @@ def veriAl():
         with open(modelPath, 'rb') as file:
             model = pickle.load(file)
 
-        X = df.drop(['Id', 'Species'], axis=1)
-        y_true = df['Species']
+        last_column = df.columns[-1]
+        X = df.drop([last_column], axis=1)
+        y_true = df[last_column]
         y_pred = model.predict(X)
 
         accuracy = accuracy_score(y_true, y_pred)
