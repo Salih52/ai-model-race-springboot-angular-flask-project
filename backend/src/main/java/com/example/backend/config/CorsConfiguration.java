@@ -18,8 +18,9 @@ public class CorsConfiguration {
                         .allowedOrigins("http://localhost:4200", "http://salih.alperenadalar.com")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
-                        .exposedHeaders("Authorization"); // optional
+                        .allowedHeaders("Content-Type"); // content-type başlığını ekleyin
             }
         };
     }
 }
+
