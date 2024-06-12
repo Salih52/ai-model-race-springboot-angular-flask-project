@@ -11,7 +11,7 @@ export class AssignService {
   private baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = 'http://localhost:8080/api/v1/assign';
+    this.baseUrl = 'http://backend:8080/api/v1/assign';
   }
 
   newAssign(assign: AssignModel) {
