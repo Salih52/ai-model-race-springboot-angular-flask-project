@@ -23,7 +23,7 @@ export class VeriService{
     private router: Router,
     private cookieService: CookieService
   ) {
-    this.url = process.env['API_URL'] || 'http://salih.alperenadalar.com/api/v1/auth';
+    this.url ='http://salih.alperenadalar.com/api/v1/auth';
     }
   public register(veri: AuthResponse) {
     veri.role = 'user';
