@@ -11,7 +11,7 @@ services:
     networks:
       - network
     environment:
-      - API_URL=http://your-domain.com/api/v1/auth  # URL'yi HTTP olarak ayarlayın
+      - API_URL=http://salih.alperenadalar.com/api/ # URL'yi HTTP olarak ayarlayın
 
   backend:
     build: ./backend
