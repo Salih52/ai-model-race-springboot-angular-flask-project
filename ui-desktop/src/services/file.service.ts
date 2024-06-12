@@ -10,7 +10,7 @@ export class FileService {
   private baseUrl : string;
 
   constructor(private http:HttpClient) { 
-    this.baseUrl = "http://backend:8080/files";
+    this.baseUrl = "https://backend:8080/files";
   }
 
   upload(testFile: FileList, title: string, file?: FileList): Observable<HttpEvent<any>> {
