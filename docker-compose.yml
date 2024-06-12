@@ -11,7 +11,7 @@ services:
     networks:
       - network
     environment:
-      - API_URL=http://salih.alperenadalar.com/api/ # URL'yi HTTP olarak ayarlayın
+      - API_URL=http://salih.alperenadalar.com/api/
 
   backend:
     build: ./backend
@@ -30,8 +30,8 @@ services:
 
   python:
     build: ./python
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
     depends_on:
       - db
     networks:
