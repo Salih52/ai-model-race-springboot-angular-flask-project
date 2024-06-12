@@ -23,9 +23,8 @@ export class VeriService{
     private router: Router,
     private cookieService: CookieService
   ) {
-    this.url = 'http://backend:8080/api/v1/auth';
-  }
-
+    this.url = process.env['API_URL'] || 'http://salih.alperenadalar.com/api/v1/auth';
+    }
   public register(veri: AuthResponse) {
     veri.role = 'user';
     return this.http.post<AuthResponse>(`${this.url}/register`, veri).pipe(
