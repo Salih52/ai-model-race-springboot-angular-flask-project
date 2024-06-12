@@ -23,7 +23,7 @@ export class VeriService{
     private router: Router,
     private cookieService: CookieService
   ) {
-    this.url = 'https://backend:8080/api/v1/auth';
+    this.url = 'http://backend:8080/api/v1/auth';
   }
 
   public register(veri: AuthResponse) {

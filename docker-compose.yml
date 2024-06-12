@@ -10,6 +10,8 @@ services:
       - python
     networks:
       - network
+    environment:
+      - NODE_ENV=production
 
   backend:
     build: ./backend
