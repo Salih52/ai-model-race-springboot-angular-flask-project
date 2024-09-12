@@ -1,4 +1,5 @@
 export interface AssignModel {
+    id: number;
     title: string;
     subtitle: string;
     description: string;
