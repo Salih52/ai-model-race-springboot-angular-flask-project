@@ -11,7 +11,7 @@ services:
     networks:
       - network
     environment:
-      - API_URL=http://147.79.114.163/
+      - API_URL=http://ailabrace.online
 
   backend:
     build: ./backend

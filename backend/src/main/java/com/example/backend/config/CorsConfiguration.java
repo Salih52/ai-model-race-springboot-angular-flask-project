@@ -15,7 +15,7 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200", "http://147.79.114.163/")
+                        .allowedOrigins("http://localhost:4200", "http://ailabrace.online")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowedHeaders("Content-Type"); // content-type başlığını ekleyin

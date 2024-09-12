@@ -24,7 +24,7 @@ public class SecurityConfiguration {
 
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/auth/**","/api/v1/assign/**","http://localhost:4200/**","/files/**","http://localhost:5000/**","http://147.79.114.163//**").permitAll()
+                        .requestMatchers("/api/v1/auth/**","/api/v1/assign/**","http://localhost:4200/**","/files/**","http://localhost:5000/**","http://ailabrace.online//**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
