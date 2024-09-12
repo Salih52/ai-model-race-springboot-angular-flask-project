@@ -31,7 +31,7 @@ public class User implements UserDetails {
     private String schoolNo;
     private String email;
     private String password;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany()
     private Set<Assign> assigns = new HashSet<>();
 
     @Enumerated(EnumType.STRING)

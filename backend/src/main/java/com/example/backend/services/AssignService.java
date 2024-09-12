@@ -45,11 +45,11 @@ public class AssignService {
         return assignRepository.findAll();
     }
 
-
-    public void delete(String title){
-        dropAssignTable(title);
-        fileStorageService.deleteDirectory(title);
-        assignRepository.deleteAssignByTitle(title);
+    public void deleteById(Integer id){
+        Assign assign = assignRepository.findById(id);
+        dropAssignTable(assign.getTitle());
+        fileStorageService.deleteDirectory(assign.getTitle());
+        assignRepository.deleteAssignByTitle(assign.getTitle());
     }
 
     public void endAssign(String title){
