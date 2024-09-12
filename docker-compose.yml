@@ -11,14 +11,12 @@ services:
     networks:
       - network
     environment:
-      - API_URL=*
+      - API_URL=http://147.79.114.163/
 
   backend:
     build: ./backend
     expose:
       - "8080"
-    ports:
-      - "8080:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
