@@ -36,10 +36,10 @@ public class AssignsController {
     }
 
 
-    @DeleteMapping("/delete/{title}")
-    public ResponseEntity<Void> delete(@PathVariable("title") String title) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         try {
-            assignService.delete(title);
+            assignService.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid table name", e);
