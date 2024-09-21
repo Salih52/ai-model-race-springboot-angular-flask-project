@@ -18,7 +18,7 @@ public class CorsConfiguration {
                         .allowedOrigins("http://localhost:4200", "http://ailabrace.online")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
-                        .allowedHeaders("Content-Type"); // content-type başlığını ekleyin
+                        .allowCredentials(true);
             }
         };
     }
