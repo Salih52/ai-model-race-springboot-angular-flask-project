@@ -7,6 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { UserModel } from 'src/models/user';
+import { environment_auth } from './environment.prod';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,7 @@ export class VeriService{
     }
   public register(veri: AuthResponse) {
     veri.role = 'user';
-    return this.http.post<AuthResponse>(`${this.url}/register`, veri).pipe(
+    return this.http.post<AuthResponse>(`${environment_auth.apiUrl}/register`, veri).pipe(
       tap((response) => {
         console.log(response);
       })
@@ -36,7 +37,7 @@ export class VeriService{
 
   public authenticate(veri: AauthenticateModel) {
     return this.http
-      .post<AauthenticateModel>(`${this.url}/authenticate`, veri)
+      .post<AauthenticateModel>(`${environment_auth.apiUrl}/authenticate`, veri)
       .pipe(
         map((response) => {
           let user: AuthResponse = jwtDecode(response.access_token);
