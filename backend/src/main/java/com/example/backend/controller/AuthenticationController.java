@@ -5,17 +5,23 @@ import com.example.backend.dto.AuthenticationResponse;
 import com.example.backend.dto.UserDto;
 import com.example.backend.services.AuthenticationService;
 import com.example.backend.dto.RegisterRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService service;
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -27,6 +33,9 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationDto request
     ){
+        System.out.println("Request Headers: " + Collections.list(httpServletRequest.getHeaderNames())
+                .stream()
+                .collect(Collectors.toMap(h -> h, httpServletRequest::getHeader)));
         return ResponseEntity.ok(service.authenticate(request));
     }
 
