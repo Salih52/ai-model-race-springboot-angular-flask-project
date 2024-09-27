@@ -51,6 +51,7 @@ export class LoginPageComponent implements OnInit {
       (error) => {
         console.log(error);
         alert("Kullanıcı adı veya şifre hatalı");
+        console.log(error.message);
       }
     );
   }
