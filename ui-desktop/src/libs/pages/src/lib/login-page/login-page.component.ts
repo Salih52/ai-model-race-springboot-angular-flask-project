@@ -31,11 +31,11 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    this.connectWebSocket(); // Connect to WebSocket on successful login
     this.authService.authenticate(form.value).subscribe(
       (response) => {
         this.authService.user.subscribe(data => {
           if (data) {
-            this.connectWebSocket(); // Connect to WebSocket on successful login
             if (data.role === "ADMIN") {
               this.router.navigate(['/admin']).then(() => {
                 window.location.reload();
