@@ -45,9 +45,11 @@ services:
     image: nginx:latest
     ports:
       - "443:443"  # HTTPS portu
+      - "8081:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt/live/ailabrace.online:/etc/letsencrypt/live/ailabrace.online:ro  # Sertifikaları ekleyin
+      - /etc/letsencrypt/ssl/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /etc/letsencrypt/ssl/privkey.pem:/etc/nginx/ssl/privkey.pem
     depends_on:
       - backend
       - ui-desktop
