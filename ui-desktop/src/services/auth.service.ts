@@ -27,7 +27,7 @@ export class VeriService {
 
   public register(veri: AuthResponse) {
     veri.role = 'user';
-    return this.http.post<AuthResponse>(`/api/v1/auth/authenticat/register`, veri).pipe(
+    return this.http.post<AuthResponse>(`/api/v1/auth/register`, veri).pipe(
       tap((response) => {
         console.log(response);
       })
@@ -36,7 +36,7 @@ export class VeriService {
 
   public authenticate(veri: AauthenticateModel) {
     return this.http
-      .post<AauthenticateModel>(`${this.url}/authenticate`, veri)
+      .post<AauthenticateModel>(`/api/v1/auth/authenticate`, veri)
       .pipe(
         map((response) => {
           let user: AuthResponse = jwtDecode(response.access_token);
