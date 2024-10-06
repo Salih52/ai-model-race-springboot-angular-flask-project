@@ -47,7 +47,7 @@ services:
       - "443:443"  # HTTPS portu
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt/live/ailabrace.online:/etc/letsencrypt/live/ailabrace.online:ro  # Sertifikaları ekleyin
+      - ./letsencrypt/etc/${ailabrace.online}/:/var/certs/:ro
     depends_on:
       - backend
       - ui-desktop
