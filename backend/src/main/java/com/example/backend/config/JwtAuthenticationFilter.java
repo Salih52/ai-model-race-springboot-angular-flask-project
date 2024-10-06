@@ -20,9 +20,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(
@@ -33,16 +33,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userName;
-        if(authHeader == null ||!authHeader.startsWith("Bearer ")) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            logger.warn("No JWT token found or user name is null");
             filterChain.doFilter(request, response);
             return;
         }
+
         jwt = authHeader.substring(7);
         userName = jwtService.extractUserName(jwt);
 
-        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
-            if(jwtService.isTokenValid(jwt, userDetails)){
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                // Token geçerli
+                logger.info("Token is valid for user: {}", userName);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -56,6 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 logger.warn("Invalid JWT token for user: {}", userName);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }
