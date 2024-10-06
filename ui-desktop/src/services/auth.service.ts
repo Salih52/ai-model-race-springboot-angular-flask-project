@@ -27,7 +27,7 @@ export class VeriService {
 
   public register(veri: AuthResponse) {
     veri.role = 'user';
-    return this.http.post<AuthResponse>(`/api/v1/auth/register`, veri).pipe(
+    return this.http.post<AuthResponse>(`/api/v1/auth/registersd`, veri).pipe(
       tap((response) => {
         console.log(response);
       })

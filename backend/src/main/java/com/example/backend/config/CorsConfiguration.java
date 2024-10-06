@@ -15,10 +15,13 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://ailabrace.online","http://localhost:4200")
+                        .allowedOrigins("https://ailabrace.online")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("Authorization", "Content-Type")
                         .allowCredentials(true);
+
+                // Loglama ekleyin
+                System.out.println("CORS configuration applied.");
             }
         };
     }
