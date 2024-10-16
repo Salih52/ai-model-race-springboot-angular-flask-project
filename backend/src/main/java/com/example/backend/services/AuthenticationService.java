@@ -33,6 +33,7 @@ public class AuthenticationService {
         if (userRepository.findBySchoolNo(request.getSchoolNo()).isPresent()) {
             throw new RuntimeException("School number is already registered");
         }
+        System.out.println("User mail:" + request.getEmail());
 
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -46,6 +47,7 @@ public class AuthenticationService {
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
+        System.out.println("Generated JWT Token: " + jwtToken);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
