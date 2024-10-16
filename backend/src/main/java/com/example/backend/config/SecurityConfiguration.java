@@ -36,15 +36,17 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        http
+                .csrf(AbstractHttpConfigurer::disable
+                )
                 .authorizeHttpRequests(auth -> {
-            auth.requestMatchers("api/v1/auth/").permitAll();
-            auth.anyRequest().authenticated();
-        })
-                .csrf(csrf -> {
-                    csrf.ignoringRequestMatchers("api/v1/auth/");
-                })
-                .build();
+//                    auth.requestMatchers("/api/v1/auth/**").permitAll(); // Permit all requests to auth endpoints
+//                    auth.anyRequest().authenticated(); // Require authentication for all other requests
+                    auth.anyRequest().permitAll();
+                    auth.requestMatchers("api/v1/auth/**").permitAll();
+                });
+
+        return http.build();
     }
 
 }
