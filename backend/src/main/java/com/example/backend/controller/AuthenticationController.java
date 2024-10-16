@@ -25,13 +25,12 @@ public class AuthenticationController {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
-    Logger logger = (Logger) LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ){
-        logger.info("R Email" + request.getEmail());
+        System.out.println("Email: " + request.getEmail());
         return ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/authenticate")
