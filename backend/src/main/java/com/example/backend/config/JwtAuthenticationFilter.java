@@ -34,14 +34,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userName;
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            logger.warn("No JWT token found or user name is null");
-            filterChain.doFilter(request, response);
-            return;
-        }
-
+        System.out.println("autheader:" + authHeader);
         jwt = authHeader.substring(7);
         userName = jwtService.extractUserName(jwt);
+        System.out.println("User name: " + userName);
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
