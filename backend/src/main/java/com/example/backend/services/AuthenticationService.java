@@ -26,6 +26,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email is already registered");
         }
@@ -41,7 +42,7 @@ public class AuthenticationService {
                 .schoolNo(request.getSchoolNo())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(getRole(request.getRole()))
+                .role(request.getRole())
                 .build();
 
         userRepository.save(user);

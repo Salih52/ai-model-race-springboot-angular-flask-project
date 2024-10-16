@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import static com.example.backend.user.Role.ADMIN;
+import static com.example.backend.user.Role.USER;
 
 @SpringBootApplication
 public class BackendApplication implements CommandLineRunner {
@@ -32,9 +33,19 @@ public class BackendApplication implements CommandLineRunner {
 					.lastName("Admin")
 					.email("admin@mail.com")
 					.password("admin")
-					.role("admin")
+					.role(ADMIN)
 					.build();
 			System.out.println("Admin token: " + service.register(admin).getAccessToken());
+
+			var user1 = RegisterRequest.builder()
+					.firstName("salih")
+					.lastName("eliaçık")
+					.email("salih@mail.com")
+					.password("123456")
+					.schoolNo("123456")
+					.role(USER)
+					.build();
+			System.out.println("Admin token: " + service.register(user1).getAccessToken());
 		};
 	}
 	@Override
