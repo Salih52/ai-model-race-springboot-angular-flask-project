@@ -36,18 +36,16 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll()  // Permit all requests
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless sessions
+                );
 
-                        .anyRequest().permitAll()
-                )
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // Loglama için burada tanımlayın
-                )
-                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(authenticationProvider)
-                .build();
+        return http.build();
     }
 }
