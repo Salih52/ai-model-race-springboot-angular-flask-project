@@ -26,11 +26,14 @@ public class AuthenticationController {
     private HttpServletRequest httpServletRequest;
 
 
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(AuthenticationController.class);
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ){
-        System.out.println("Email: " + request.getEmail());
+        // Log the email when the register request comes in
+        logger.info("Register request received. Email: {}"+ request.getEmail());
         return ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/authenticate")

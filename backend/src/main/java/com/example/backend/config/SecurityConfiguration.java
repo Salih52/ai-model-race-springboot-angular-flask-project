@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // Loglama için burada tanımlayın
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider)
                 .build();
     }
