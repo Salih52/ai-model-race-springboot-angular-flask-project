@@ -3,6 +3,7 @@ package com.example.backend.config;
 import com.example.backend.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +17,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY ="f0197fb9012bc2b6b974076c7d471e8c28aa36634c8b4cfd201b24be93218d59";
+    private static final String SECRET_KEY ="8f135a1b0813a667bad56b8f241c83e2d44e2800cd0bed014eb77d0d367f2bdcb336d9ddae5ac5fc79e372828123ebea43de0aa7de82803a2f15fdd9b5c7780d";
+    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     public String extractUserName(String token) {
         return extractClaim(token , Claims::getSubject);
     }
@@ -55,11 +57,14 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *24))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserName(token);
+        System.out.println("Extracted username from token: " + username);
+        System.out.println("UserDetails username: " + userDetails.getUsername());
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
