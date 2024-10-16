@@ -36,15 +36,15 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()  // Permit all requests
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless sessions
-                );
-
-        return http.build();
+        return http
+                .authorizeHttpRequests(auth -> {
+            auth.requestMatchers("api/v1/auth/").permitAll();
+            auth.anyRequest().authenticated();
+        })
+                .csrf(csrf -> {
+                    csrf.ignoringRequestMatchers("api/v1/auth/");
+                })
+                .build();
     }
+
 }
