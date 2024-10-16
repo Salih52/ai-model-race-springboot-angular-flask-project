@@ -37,7 +37,6 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationDto request
     ){
-        logger.info("A mail: " + request.getEmail());
         System.out.println("Request Headers: " + Collections.list(httpServletRequest.getHeaderNames())
                 .stream()
                 .collect(Collectors.toMap(h -> h, httpServletRequest::getHeader)));
