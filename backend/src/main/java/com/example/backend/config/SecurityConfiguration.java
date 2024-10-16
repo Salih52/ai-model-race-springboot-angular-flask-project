@@ -40,10 +40,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable
                 )
                 .authorizeHttpRequests(auth -> {
-//                    auth.requestMatchers("/api/v1/auth/**").permitAll(); // Permit all requests to auth endpoints
-//                    auth.anyRequest().authenticated(); // Require authentication for all other requests
                     auth.anyRequest().permitAll();
-                    auth.requestMatchers("api/v1/auth/**").permitAll();
                 });
 
         return http.build();
