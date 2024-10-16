@@ -7,12 +7,14 @@ import com.example.backend.services.AuthenticationService;
 import com.example.backend.dto.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,16 +25,20 @@ public class AuthenticationController {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
+    Logger logger = (Logger) LoggerFactory.getLogger(AuthenticationController.class);
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ){
+        logger.info("R Email" + request.getEmail());
         return ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationDto request
     ){
+        logger.info("A mail: " + request.getEmail());
         System.out.println("Request Headers: " + Collections.list(httpServletRequest.getHeaderNames())
                 .stream()
                 .collect(Collectors.toMap(h -> h, httpServletRequest::getHeader)));
