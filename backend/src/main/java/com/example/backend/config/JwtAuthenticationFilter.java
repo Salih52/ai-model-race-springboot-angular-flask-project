@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         logger.info("Full request URL: " + request.getRequestURL());
         logger.info("Headers: " + Collections.list(request.getHeaderNames()));
-        if (request.getRequestURI().contains("/api/v1/auth")) {
+        if (request.getRequestURI().contains("/v1/auth")) {
             filterChain.doFilter(request, response);
             return;
         }
