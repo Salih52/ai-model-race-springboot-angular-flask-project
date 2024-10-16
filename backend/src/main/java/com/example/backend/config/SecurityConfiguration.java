@@ -42,7 +42,7 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/assign/**", "/files/**").permitAll()
+                        .requestMatchers("/v1/auth/**", "/v1/assign/**", "/files/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptions -> exceptions
