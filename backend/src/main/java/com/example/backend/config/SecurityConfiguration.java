@@ -37,10 +37,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable
-                )
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
                 .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().permitAll();
+                    auth.requestMatchers("/api/v1/auth/register").permitAll() // Allow access to registration
+                            .anyRequest().permitAll(); // Permit all other requests
                 });
 
         return http.build();
