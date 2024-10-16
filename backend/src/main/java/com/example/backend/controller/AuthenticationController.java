@@ -7,6 +7,7 @@ import com.example.backend.services.AuthenticationService;
 import com.example.backend.dto.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,14 +26,14 @@ public class AuthenticationController {
     private HttpServletRequest httpServletRequest;
 
 
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(AuthenticationController.class);
+    private final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ){
         // Log the email when the register request comes in
-        logger.info("Register request received. Email: {}"+ request.getEmail());
+        logger.info("Email in controller: " + request.getEmail());
         return ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/authenticate")
