@@ -13,27 +13,27 @@
         </div>
         <div class="form-group mb-3">
           <label for="subtitle">Alt Başlık</label>
-          <textarea name="subtitle" ngModel class="form-control" id="subtitle" rows="2" required #subtitle="ngModel"></textarea>
+          <textarea name="subtitle" ngModel class="form-control" id="subtitle" rows="2"  #subtitle="ngModel"></textarea>
           <div *ngIf="subtitle.invalid && subtitle.touched" class="text-danger">Alt Başlık gerekli.</div>
         </div>
         <div class="form-group mb-3">
           <label for="description">Açıklama</label>
-          <textarea name="description" ngModel id="description" class="form-control" rows="5" required #description="ngModel"></textarea>
+          <textarea name="description" ngModel id="description" class="form-control" rows="5"  #description="ngModel"></textarea>
           <div *ngIf="description.invalid && description.touched" class="text-danger">Açıklama gerekli.</div>
         </div>
         <div class="form-group mb-3">
           <label for="startDate">Başlangıç Tarihi</label>
-          <input type="date" ngModel name="startDate" class="form-control" id="startDate" required #startDate="ngModel">
+          <input type="date" ngModel name="startDate" class="form-control" id="startDate"  #startDate="ngModel">
           <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">Başlangıç Tarihi gerekli.</div>
         </div>
         <div class="form-group mb-3">
           <label for="endDate">Bitiş Tarihi</label>
-          <input type="date" ngModel name="endDate" class="form-control" id="endDate" required #endDate="ngModel">
+          <input type="date" ngModel name="endDate" class="form-control" id="endDate"  #endDate="ngModel">
           <div *ngIf="endDate.invalid && endDate.touched" class="text-danger">Bitiş Tarihi gerekli.</div>
         </div>
         <div class="form-group mb-3">
           <label for="competitionType">Yarışma Türü</label>
-          <select name="competitionType" ngModel class="form-control" id="competitionType" required #competitionType="ngModel">
+          <select name="competitionType" ngModel class="form-control" id="competitionType"  #competitionType="ngModel">
             <option value="" disabled selected>Tür Seçin</option>
             <option value="classification">Sınıflandırma</option>
             <option value="regression">Regresyon</option>

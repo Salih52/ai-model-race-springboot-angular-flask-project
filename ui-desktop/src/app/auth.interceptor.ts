@@ -11,9 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(
-    private cookieService: CookieService
-  ) {}
+  constructor(private cookieService: CookieService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.cookieService.get('jwtToken');
@@ -23,10 +21,8 @@ export class AuthInterceptor implements HttpInterceptor {
           Authorization: `Bearer ${token}`
         }
       });
-      return next.handle(request);
     }
-    else{
-      return next.handle(request);
-    }
+    
+    return next.handle(request);
   }
 }

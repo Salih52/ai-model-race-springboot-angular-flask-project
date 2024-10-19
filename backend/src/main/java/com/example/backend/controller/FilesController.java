@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 
 @Controller
-@RequestMapping("/api/v1/files")
+@RequestMapping("/v1/files")
 @RequiredArgsConstructor
 @Slf4j
 public class FilesController {
@@ -35,16 +36,20 @@ public class FilesController {
     FileStorageService storageService;
 
     private final AssignService assignService;
+    @Value("${flask.api.url}")
+    private String flaskApiUrl;
 
     @PostMapping("/uploadAdmin")
-    public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam(value = "file" , required = false) MultipartFile[] files ,
+        public ResponseEntity<ResponseMessage> uploadFiles(@RequestParam(value = "file" , required = false) MultipartFile[] files ,
                                                        @RequestParam(value = "title") String title,
                                                        @RequestParam(value = "testFile") MultipartFile[] testFile) {
         String message = "";
+       storageService.createDirectory(title);
+
         try {
             List<String> fileNames = new ArrayList<>();
 
-            storageService.createDirectory(title);
+
 
             if (files != null) {
                 Arrays.asList(files).stream().forEach(file -> {
@@ -206,7 +211,6 @@ public class FilesController {
 
         try {
             // Flask API'den gelen sonucu döndürme
-            String flaskApiUrl = "http://python:5000/veriAl"; //local için "http://127.0.0.1:5000/veriAl" , docker için "http://python:5000/veriAl"
             return restTemplate.postForObject(flaskApiUrl, request, String.class);
         } catch (RestClientException e) {
             // Hata durumunda loglama ve uygun yanıt döndürme

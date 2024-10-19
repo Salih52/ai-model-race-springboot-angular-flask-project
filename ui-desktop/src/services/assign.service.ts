@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AssignModel } from 'src/models/assignModel';
 import { ScoreModel } from 'src/models/scoreModel';
 
@@ -8,11 +9,9 @@ import { ScoreModel } from 'src/models/scoreModel';
   providedIn: 'root',
 })
 export class AssignService {
-  private baseUrl: string;
+  private baseUrl: string = environment.apiUrl + 'assign';
 
-  constructor(private http: HttpClient) {
-    this.baseUrl = '/api/v1/assign';
-  }
+  constructor(private http: HttpClient) {}
 
   newAssign(assign: AssignModel) {
     assign.status = "active"

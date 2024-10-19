@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/assign")
+@RequestMapping("/v1/assign")
 @RequiredArgsConstructor
 public class AssignsController {
     private final AssignService assignService;

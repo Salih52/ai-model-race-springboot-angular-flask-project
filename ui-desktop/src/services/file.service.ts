@@ -1,17 +1,16 @@
 import { HttpClient, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { FileModel } from 'src/models/file';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-  private baseUrl : string;
+  private baseUrl : string = environment.apiUrl + 'files';
 
-  constructor(private http:HttpClient) { 
-    this.baseUrl = "/api/v1/files";
-  }
+  constructor(private http:HttpClient) { }
 
   upload(testFile: FileList, title: string, file?: FileList): Observable<HttpEvent<any>> {
     console.log("odev: " + file, "test: " + testFile, "title: " + title);

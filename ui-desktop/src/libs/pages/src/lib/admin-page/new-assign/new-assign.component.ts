@@ -94,9 +94,39 @@ export class NewAssignComponent {
   // }
 
   onSubmit(form:NgForm){
+    this.progress = 0;
+    if (this.selectedTestFile) {
+        this.fileService.upload(this.selectedTestFile,this.titleee , this.selectedFiles).subscribe({
+          next: (event: any) => {
+            console.log('dosya yükleme');
+            if (event.type === HttpEventType.UploadProgress) {
+              this.progress = Math.round(100 * event.loaded / event.total);
+            } else if (event instanceof HttpResponse) {
+              this.message = event.body.message;
+              // this.fileInfos = this.fileService.getFiles("123");
+            }
+          },
+          error: (err: any) => {
+            console.log(err);
+            this.progress = 0;
+
+            if (err.error && err.error.message) {
+              this.message = err.error.message;
+            } else {
+              this.message = 'Could not upload the file!';
+            }
+
+            this.currentFile = undefined;
+            return;
+          }
+        });
+
+      this.selectedFiles = undefined;
+    }
+
+
     this.assignService.newAssign(form.value).subscribe({
       next: (event: any) => {
-        this.upload();
         alert("Assign created successfully");
         this.dialog.closeAll();
         window.location.reload();
