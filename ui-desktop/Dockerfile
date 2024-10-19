@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Angular uygulamasını build edin
-RUN npm run build --configuration=production
+RUN npm run build
 
 # Angular uygulamasını başlatın
 CMD ["npm","run" ,"start"]
