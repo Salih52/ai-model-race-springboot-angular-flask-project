@@ -7,14 +7,15 @@ import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { UserModel } from 'src/models/user';
-import { environment_auth } from './environment.prod';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class VeriService {
-  private url: string = environment_auth.apiUrl;
-  private websocketUrl: string = environment_auth.websocketUrl; // Add this line
+  private url: string = environment.apiUrl;
+  private websocketUrl: string = environment.websocketUrl; // Add this line
   private _isLogin = new BehaviorSubject<boolean>(this.cookieService.get('jwtToken') ? true : false);
   isLogin$ = this._isLogin.asObservable();
   user = new BehaviorSubject<AuthResponse | null>(null);
@@ -27,7 +28,7 @@ export class VeriService {
 
   public register(veri: AuthResponse) {
     veri.role = 'USER';
-    return this.http.post<AuthResponse>(`/api/v1/auth/register`, veri).pipe(
+    return this.http.post<AuthResponse>(`${this.url}auth/register`, veri).pipe(
       tap((response) => {
         console.log(response);
       })
@@ -36,7 +37,7 @@ export class VeriService {
 
   public authenticate(veri: AauthenticateModel) {
     return this.http
-      .post<AauthenticateModel>(`/api/v1/auth/authenticate`, veri)
+      .post<AauthenticateModel>(`${this.url}auth/authenticate`, veri)
       .pipe(
         map((response) => {
           let user: AuthResponse = jwtDecode(response.access_token);
@@ -47,7 +48,7 @@ export class VeriService {
   }
 
   public getAllUsers() {
-    return this.http.get<UserModel[]>(`${this.url}/getUsers`);
+    return this.http.get<UserModel[]>(`${this.url}auth/getUsers`);
   }
 
   logout() {

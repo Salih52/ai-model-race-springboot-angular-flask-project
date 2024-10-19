@@ -1,6 +1,5 @@
-export const environment_auth = {
+export const environment = {
     production: true,
-    apiUrl: 'https://ailabrace.online/api/v1/auth',
+    apiUrl: '/api/v1/',
     websocketUrl: 'wss://ailabrace.online/ng-cli-ws' // Adjust as needed
-  };
-  
+};
