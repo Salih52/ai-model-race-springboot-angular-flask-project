@@ -1,24 +1,39 @@
-.alan{
-    transform: translate(0, 66%);
+/* Section adjustments */
+.alan {
+  transform: translate(0, 50%);
 }
 
-.logo{
-    margin: 0;
-    width: 50%;
+/* Logo styling */
+.logo {
+  width: 70%; /* Adjust logo size */
 }
 
+
+.h-custom {
+  height: calc(100% - 73px);
+}
+
+/* Responsive logo size for mobile */
+@media (max-width: 768px) {
+  .logo {
+    width: 70%; /* Larger logo for small screens */
+  }
+
+  .alan {
+    transform: translate(0, 10%); /* Adjust section height for smaller screens */
+  }
+
+  .h-custom {
+    height: 100%; /* Full height on mobile devices */
+  }
+}
+
+
+/* Divider styling (if needed elsewhere) */
 .divider:after,
 .divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
-}
-.h-custom {
-height: calc(100% - 73px);
-}
-@media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }

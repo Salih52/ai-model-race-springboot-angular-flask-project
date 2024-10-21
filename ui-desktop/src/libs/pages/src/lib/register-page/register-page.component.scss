@@ -17,8 +17,18 @@ background: #eee;
 .h-custom {
 height: calc(100% - 73px);
 }
-@media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
-}
+
+@media (max-width: 768px) {
+    .logo {
+      width: 60%; /* Larger logo for small screens */
+      padding-bottom: 10%;
+    }
+  
+    .alan {
+      transform: translate(0, 10%); /* Adjust section height for smaller screens */
+    }
+  
+    .h-custom {
+      height: 100%; /* Full height on mobile devices */
+    }
+  }

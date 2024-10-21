@@ -1,9 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.mdc-dialog__surface {
-    background-color: rgb(230, 230, 230) !important;
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-image: linear-gradient(to bottom, #001464, #000000);
+    background-attachment: fixed; /* Keeps the gradient fixed during scroll */
+    background-repeat: no-repeat; /* Ensures the gradient doesn't repeat */
+    background-size: cover; /* Ensures the gradient covers the entire page */
+  }
   
-}
+  .mdc-dialog__surface {
+    background-color: rgb(230, 230, 230) !important;
+  }
+  

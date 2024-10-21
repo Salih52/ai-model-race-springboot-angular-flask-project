@@ -1,13 +1,14 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-secondary static-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
   <div class="container">
     <a class="navbar-brand" [routerLink]="['/mainPage']">
-      <img src="./assets/V2.png" alt="..." height="10" class="imgg">
+      <img src="./assets/V2.png" alt="..." height="50" class="imgg">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" [routerLink]="['/mainPage']">Ana Sayfa</a>
         </li>
@@ -37,7 +38,7 @@
             <a class="nav-link" [routerLink]="['/login']">Giriş Yap</a>
           </li>
           <li class="nav-item-login">
-            <a class="ml-3 nav-link" [routerLink]="['/register']">Kayıt Ol</a>
+            <a class="nav-link" [routerLink]="['/register']">Kayıt Ol</a>
           </li>
         </ul>
       </div>
@@ -45,12 +46,7 @@
   </div>
 </nav>
 
-<div [ngStyle]="{
-    'background-image': 'linear-gradient(to bottom, #001464, #000000)',
-    'min-height': '100vh',
-    'width': '100%',
-    'position': 'absolute'
-  }">
+<div >
     <router-outlet></router-outlet>
   </div>
 
