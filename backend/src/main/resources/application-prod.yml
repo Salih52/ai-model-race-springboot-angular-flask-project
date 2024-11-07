@@ -14,12 +14,6 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-logging:
-  level:
-    org:
-      springframework:
-        security: debug
-
 flask:
   api:
     url: "http://python:5000/veriAl"
