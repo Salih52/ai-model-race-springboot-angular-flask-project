@@ -39,6 +39,7 @@ export class AdminAssignModalComponent {
         this.fileService.getFilesAdmin(this.assign?.title).subscribe( 
           files => {
             this.fileInfos = files.length > 0 ? files : undefined;
+            console.log(this.fileInfos);
           },
           error => {
             console.error('Dosya alınırken bir hata oluştu:',error);
