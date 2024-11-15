@@ -31,7 +31,8 @@
             <div class="card-body">
                 <ul class="list-group list-group-flush">
                     <li *ngFor="let file of fileInfos" class="list-group-item">
-                        <a [href]="getSafeUrl(file.url)">{{ file.name }}</a>
+                        <!-- <a [href]="getSafeUrl(file.url)">{{ file.name }}</a> -->
+                         <button (click)="getFile(file.name)" class="btn btn-primary">{{ file.name }}</button>
                     </li>
                 </ul>
             </div>

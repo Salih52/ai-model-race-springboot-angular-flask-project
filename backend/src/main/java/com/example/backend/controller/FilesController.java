@@ -194,6 +194,15 @@ public class FilesController {
     }
 
 
+    @PostMapping("/download")
+    @ResponseBody
+    public ResponseEntity<Resource> downloadFile(@RequestParam(value = "assignTitle") String assignTitle,
+                                                 @RequestParam(value = "fileName") String filename) {
+        Resource file = storageService.loadAdmin(assignTitle, filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
     @PostMapping("/delete")
     public ResponseEntity<ResponseMessage> deleteAll(){
         String message = "";

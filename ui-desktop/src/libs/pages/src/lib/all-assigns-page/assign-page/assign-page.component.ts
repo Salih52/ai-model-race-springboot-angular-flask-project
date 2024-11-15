@@ -29,7 +29,6 @@ export class AssignPageComponent implements OnInit {
   isLogin: boolean = false;
 
   ngOnInit(): void {
-
     const assignName = String(this.route.snapshot.paramMap.get('assignName'));
     this.veriService.isLogin$.subscribe((isLogin) => {
       this.isLogin = isLogin;
@@ -38,11 +37,14 @@ export class AssignPageComponent implements OnInit {
     this.assignSerive.getAssigns().subscribe((assigns) => {
       this.assigns = assigns.find((assign) => assign.title === assignName);
       if (this.assigns?.title) {
-        this.isLogin ? this.router.navigate([`/userPage/${this.assigns.title}`]) : null;
+        this.isLogin
+          ? this.router.navigate([`/userPage/${this.assigns.title}`])
+          : null;
         console.log(this.assigns.title);
         this.fileService.getFilesAdmin(this.assigns.title).subscribe(
           (files) => {
             this.fileInfos = files.length > 0 ? files : undefined;
+            console.log(this.fileInfos);
           },
           (error) => {
             console.error('Dosya alınırken bir hata oluştu:', error);
@@ -61,13 +63,31 @@ export class AssignPageComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
-  showResults(){
-    if(this.assigns){
-      this.dialogRef.open(ResultsPageComponent ,{
-      width:'1000px',
-      height:'500px',
-      data:{assigns:this.assigns.title}
-    })
+  getFile(file: string) {
+    if (this.assigns?.title) {
+      this.fileService.downloadFile(file, this.assigns?.title).subscribe(
+        (response) => {
+          const blob = new Blob([response], {
+            type: 'application/octet-stream',
+          });
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
+        },
+        (error) => {
+          console.error('Dosya indirilirken bir hata oluştu:', error);
+          // Hata durumunda kullanıcıya bir hata mesajı gösterebilirsiniz.
+        }
+      );
+    }
+  }
+
+  showResults() {
+    if (this.assigns) {
+      this.dialogRef.open(ResultsPageComponent, {
+        width: '1000px',
+        height: '500px',
+        data: { assigns: this.assigns.title },
+      });
     }
   }
 }

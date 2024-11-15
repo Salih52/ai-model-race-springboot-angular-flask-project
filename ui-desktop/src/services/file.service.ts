@@ -38,6 +38,14 @@ export class FileService {
     return this.http.request(req);
 }
 
+  downloadFile(fileName: string, assignTitle: string): Observable<Blob> {
+    const formData: FormData = new FormData();
+    formData.append('fileName', fileName);
+    formData.append('assignTitle', assignTitle);
+    return this.http.post(`${this.baseUrl}/download`, formData, {
+      responseType: 'blob'
+    });
+  }
 
 
   uploadUser(file: FileList, title:string , assignTitle:string): Observable<HttpEvent<any>> {
