@@ -1,7 +1,7 @@
 package com.example.backend.services;
 
 import com.example.backend.dto.AssignDto;
-import com.example.backend.dto.ScoresDto;
+import com.example.backend.dto.ClassificationScoresDto;
 import com.example.backend.entity.Assign;
 import com.example.backend.repository.AssignRepository;
 import com.example.backend.user.User;
@@ -36,6 +36,7 @@ public class AssignService {
                 .startDate(assignDto.getStartDate())
                 .endDate(assignDto.getEndDate())
                 .status(assignDto.getStatus())
+                .competitionType(assignDto.getCompetitionType())
                 .build();
         createAssignTable(assign);
         return assignRepository.save(assign);
@@ -55,6 +56,10 @@ public class AssignService {
     public void endAssign(String title){
         Assign assign = assignRepository.getAssignByTitle(title);
         assign.setStatus("inactive");
+    }
+
+    public Assign getAssignByTitle(String title){
+        return assignRepository.getAssignByTitle(title);
     }
 
     public Set<Assign> getUserAssignmentsBySchoolNo(String schoolNo) {
@@ -80,22 +85,35 @@ public class AssignService {
 
     private void createAssignTable(Assign assign) {
         String tableName = assign.getTitle().replaceAll("[^a-zA-Z0-9_]", ""); // Dinamik tablo adı
+        String sql = "";
+        if(assign.getCompetitionType().equals("classification")){
+            sql = "CREATE TABLE " + tableName + " ("
+                    + "id BIGSERIAL PRIMARY KEY, "
+                    + "studentNo VARCHAR(255), "
+                    + "accuracy FLOAT, "
+                    + "f1Score FLOAT, "
+                    + "precision FLOAT, "
+                    + "recall FLOAT"
+                    + ")";
+        } else if (assign.getCompetitionType().equals("regression")) {
+            sql = "CREATE TABLE " + tableName + " ("
+                    + "id BIGSERIAL PRIMARY KEY, "
+                    + "studentNo VARCHAR(255), "
+                    + "meanAbsoluteError FLOAT, "
+                    + "meanSquaredError FLOAT, "
+                    + "r2Score FLOAT"
+                    + ")";
+        }
 
-        String sql = "CREATE TABLE " + tableName + " ("
-                + "id BIGSERIAL PRIMARY KEY, "
-                + "studentNo VARCHAR(255), "
-                + "accuracy FLOAT, "
-                + "f1Score FLOAT, "
-                + "precision FLOAT, "
-                + "recall FLOAT"
-                + ")";
         entityManager.createNativeQuery(sql).executeUpdate();
     }
 
     @Transactional
-    public void insertData(String tableName, String studentNo, Double accuracy, Double f1Score, Double precision, Double recall) {
+    public void insertClassificationData(String tableName, String studentNo, Double accuracy, Double f1Score, Double precision, Double recall) {
         tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
-        String sql = "INSERT INTO " + tableName + " ( studentNo, accuracy, f1Score, precision, recall) VALUES (?, ?, ?, ?, ?)";
+
+        String sql = "";
+        sql = "INSERT INTO " + tableName + " (studentNo, accuracy, f1Score, precision, recall) VALUES (?, ?, ?, ?, ?)";
         entityManager.createNativeQuery(sql)
                 .setParameter(1, studentNo)
                 .setParameter(2, accuracy)
@@ -105,30 +123,63 @@ public class AssignService {
                 .executeUpdate();
     }
     @Transactional
-    public List<ScoresDto> getAllRecordsSortedByF1Score(String tableName) {
+    public void insertRegressionData(String tableName ,String studentNo ,Double meanAbsoluteError, Double meanSquaredError, Double r2Score){
         tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
-        String sql = "SELECT studentNo, accuracy, f1Score, precision, recall FROM " + tableName + " ORDER BY f1Score DESC";
+        String sql = "INSERT INTO " + tableName + " (studentNo, meanAbsoluteError, meanSquaredError, r2Score) VALUES (?, ?, ?, ?)";
+        entityManager.createNativeQuery(sql)
+                .setParameter(1, studentNo)
+                .setParameter(2, meanAbsoluteError)
+                .setParameter(3, meanSquaredError)
+                .setParameter(4, r2Score)
+                .executeUpdate();
+
+    }
+
+    @Transactional
+    public List<ClassificationScoresDto> getAllRecordsSortedByMetric(String tableName) {
+        String competitionType = getAssignByTitle(tableName).getCompetitionType();
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        String sql = "";
+        if ("classification".equals(competitionType)) {
+            sql = "SELECT studentNo, accuracy, f1Score, precision, recall FROM " + tableName + " ORDER BY f1Score DESC";
+        } else if ("regression".equals(competitionType)) {
+            sql = "SELECT studentNo, meanAbsoluteError, meanSquaredError, r2Score FROM " + tableName + " ORDER BY r2Score DESC";
+        }
+
         Query query = entityManager.createNativeQuery(sql);
         List<Object[]> results = query.getResultList();
 
         return results.stream()
-                .map(result -> new ScoresDto(
-                        (String) result[0],
-                        (Double) result[1],
-                        (Double) result[2],
-                        (Double) result[3],
-                        (Double) result[4]
-                ))
+                .map(result -> {
+                    if ("classification".equals(competitionType)) {
+                        return new ClassificationScoresDto(
+                                (String) result[0],
+                                (Double) result[1],
+                                (Double) result[2],
+                                (Double) result[3],
+                                (Double) result[4]
+                        );
+                    } else if ("regression".equals(competitionType)) {
+                        return new ClassificationScoresDto(
+                                (String) result[0],
+                                (Double) result[1],
+                                (Double) result[2],
+                                (Double) result[3],
+                                null // regression might not have precision/recall
+                        );
+                    }
+                    return null; // Default fallback, should not reach here
+                })
                 .collect(Collectors.toList());
     }
 
+
     @Transactional
     public void dropAssignTable(String tableName) {
-        // Tablo ismindeki izin verilmeyen karakterleri kaldırarak sadece geçerli karakterleri kullanıyoruz
         String sanitizedTableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
-
         String sql = "DROP TABLE IF EXISTS " + sanitizedTableName;
         entityManager.createNativeQuery(sql).executeUpdate();
     }
+
 
 }

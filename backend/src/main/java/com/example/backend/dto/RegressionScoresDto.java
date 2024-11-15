@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScoresDto {
+public class RegressionScoresDto {
     private String studentNo;
-    private Double accuracy;
-    private Double f1Score;
-    private Double precision;
-    private Double recall;
+    private Double meanAbsoluteError;
+    private Double meanSquaredError;
+    private Double r2Score;
 }

@@ -10,6 +10,12 @@
         <div class="d-flex justify-content-center" *ngIf="assigns.status == 'inactive' ">
             <h2  class="text-danger">Yarışma Bitmiştir</h2>
         </div>
+        <div class="d-flex justify-content-center" *ngIf="assigns?.competitionType == 'classification' ">
+          <h2  class="text-info">Yarişma Türü: Sınıflandırma</h2>
+      </div>
+      <div class="d-flex justify-content-center" *ngIf="assigns?.competitionType == 'regression' ">
+          <h2  class="text-info">Yarişma Türü: Regresyon</h2>
+      </div>
       </div>
       <div class="card-body">
           

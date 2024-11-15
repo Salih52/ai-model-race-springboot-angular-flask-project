@@ -25,4 +25,5 @@ public class Assign {
     @Column(length = 1024)
     private String description;
     private String status;
+    private String competitionType;
 }

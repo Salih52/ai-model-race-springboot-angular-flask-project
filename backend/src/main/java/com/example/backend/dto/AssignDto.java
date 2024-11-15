@@ -18,4 +18,5 @@ public class AssignDto {
     private Date startDate;
     private Date endDate;
     private String status;
+    private String competitionType;
 }

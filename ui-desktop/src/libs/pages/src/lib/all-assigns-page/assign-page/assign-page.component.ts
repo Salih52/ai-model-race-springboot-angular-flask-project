@@ -7,6 +7,7 @@ import { AssignService } from 'src/services/assign.service';
 import { VeriService } from 'src/services/auth.service';
 import { FileService } from 'src/services/file.service';
 import { ResultsPageComponent } from './results-page/results-page.component';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-assign-page',
@@ -19,7 +20,8 @@ export class AssignPageComponent implements OnInit {
     private fileService: FileService,
     private veriService: VeriService,
     private router: Router,
-    private dialogRef: MatDialog
+    private dialogRef: MatDialog,
+    private sanitizer: DomSanitizer
   ) {}
   private route = inject(ActivatedRoute);
   assigns?: AssignModel;
@@ -54,6 +56,10 @@ export class AssignPageComponent implements OnInit {
     });
   }
   openModal() {}
+
+  getSafeUrl(url: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
 
   showResults(){
     if(this.assigns){

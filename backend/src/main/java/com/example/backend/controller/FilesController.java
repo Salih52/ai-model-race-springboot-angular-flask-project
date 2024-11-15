@@ -3,8 +3,9 @@ package com.example.backend.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.example.backend.dto.ModelPathDto;
-import com.example.backend.dto.ScoresDto;
+import com.example.backend.dto.ClassificationScoresDto;
+import com.example.backend.dto.RegressionScoresDto;
+import com.example.backend.entity.Assign;
 import com.example.backend.messages.ResponseMessage;
 import com.example.backend.model.FileInfo;
 import com.example.backend.services.AssignService;
@@ -85,6 +86,8 @@ public class FilesController {
             List<String> fileNames = new ArrayList<>();
             String dataPath = null;
             String modelPath = null;
+            String competitionType = null;
+            Assign assign = assignService.getAssignByTitle(assignTitle);
 
             for (MultipartFile file : files) {
                 storageService.saveUser(file, title, assignTitle);
@@ -96,16 +99,25 @@ public class FilesController {
                 if (file.getOriginalFilename().endsWith(".pkl")) {
                     modelPath = storageService.getModelPath(assignTitle,title);
                     dataPath = storageService.getDataPath(assignTitle);
+                    competitionType = assign.getCompetitionType();
+
                 }
             }
 
             if (dataPath != null && modelPath != null) {
                 // getModelScore metodunu çağır
-                String flaskResponse = getModelScore(dataPath, modelPath);
+                String flaskResponse = getModelScore(dataPath, modelPath , competitionType);
                 try {
-                    ScoresDto result = objectMapper.readValue(flaskResponse, ScoresDto.class);
-                    result.setStudentNo(title);
-                    assignService.insertData(assignTitle,result.getStudentNo(), result.getAccuracy(), result.getF1Score(), result.getPrecision(), result.getRecall());
+                    if (competitionType.equals("classification")){
+                        ClassificationScoresDto result = objectMapper.readValue(flaskResponse, ClassificationScoresDto.class);
+                        result.setStudentNo(title);
+                        assignService.insertClassificationData(assignTitle,result.getStudentNo(), result.getAccuracy(), result.getF1Score(), result.getPrecision(), result.getRecall());
+                    } else if (competitionType.equals("scores")) {
+                        RegressionScoresDto result = objectMapper.readValue(flaskResponse, RegressionScoresDto.class);
+                        result.setStudentNo(title);
+                        assignService.insertRegressionData(assignTitle,result.getStudentNo(), result.getMeanAbsoluteError(), result.getMeanSquaredError(), result.getR2Score() );
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -197,12 +209,13 @@ public class FilesController {
 
     @PostMapping("/getScore")
     @ResponseBody
-    public String getModelScore(String dataPath , String modelPath){
+    public String getModelScore(String dataPath , String modelPath , String competitionType){
         //String jsonData = "{\"veriYolu\": \"C:\\Users\\salih\\Desktop\\project\\python\\train.csv\", \"modelYolu\": \"C:\\Users\\salih\\Desktop\\project\\python\\model1_gb.pkl.csv\"}";
 
         JSONObject jo = new JSONObject();
         jo.put("dataPath", dataPath);
         jo.put("modelPath", modelPath);
+        jo.put("competitionType" , competitionType);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

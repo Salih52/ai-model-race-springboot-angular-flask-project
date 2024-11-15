@@ -1,13 +1,12 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.ScoresDto;
+import com.example.backend.dto.ClassificationScoresDto;
 import com.example.backend.messages.ResponseMessage;
 import com.example.backend.services.AssignService;
 import com.example.backend.dto.AssignDto;
 import com.example.backend.entity.Assign;
 import com.example.backend.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +48,8 @@ public class AssignsController {
     }
 
     @PostMapping("/getScoreList")
-    public ResponseEntity<List<ScoresDto>> getScoreList(@RequestParam(value = "tableName") String tableName){
-         return ResponseEntity.ok(assignService.getAllRecordsSortedByF1Score(tableName));
+    public ResponseEntity<List<ClassificationScoresDto>> getScoreList(@RequestParam(value = "tableName") String tableName){
+         return ResponseEntity.ok(assignService.getAllRecordsSortedByMetric(tableName));
     }
 
     @PostMapping("/endAssign")

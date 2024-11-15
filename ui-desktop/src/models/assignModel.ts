@@ -6,4 +6,5 @@ export interface AssignModel {
     startDate: string;
     endDate: string;
     status: string;
+    competitionType: string;
 }
