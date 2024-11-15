@@ -188,6 +188,7 @@ public class FilesController {
     public ResponseEntity<Resource> getFileAdmin(@PathVariable String assignTitle,
                                             @PathVariable String filename) {
         Resource file = storageService.loadAdmin(assignTitle, filename);
+        log.info(String.valueOf(file));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
