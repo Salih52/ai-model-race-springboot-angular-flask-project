@@ -80,6 +80,57 @@ export class UserAssignModalComponent implements OnInit {
     });
   }
 
+  getFile(fileName: string) {
+    if (this.assigns?.title) {
+      this.fileService.downloadFile(fileName, this.assigns?.title).subscribe(
+        (response) => {
+          const contentType = fileName.split('.').pop();
+          let filename = fileName;
+
+          const blob = new Blob([response], { type: contentType });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        },
+        (error) => {
+          console.error('Dosya indirilirken bir hata oluştu:', error);
+          // Hata durumunda kullanıcıya bir hata mesajı gösterebilirsiniz.
+        }
+      );
+    }
+  }
+
+  getModelFile(fileName: string) {
+    if (this.assigns?.title) {
+      this.fileService
+        .downloadModelFile(fileName, this.assigns.title, this.studentNo)
+        .subscribe(
+          (response) => {
+            const contentType = fileName.split('.').pop();
+            let filename = fileName;
+
+            const blob = new Blob([response], { type: contentType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          },
+          (error) => {
+            console.error('Dosya indirilirken bir hata oluştu:', error);
+            // Hata durumunda kullanıcıya bir hata mesajı gösterebilirsiniz.
+          }
+        );
+    }
+  }
   selectFile(event: any): void {
     this.printFiles = Array.from(event.target.files);
     this.selectedFiles = event.target.files;

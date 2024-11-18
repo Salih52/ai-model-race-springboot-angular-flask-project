@@ -203,6 +203,16 @@ public class FilesController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    @PostMapping("/downloadModel")
+    @ResponseBody
+    public ResponseEntity<Resource> downloadFileModel(@RequestParam(value = "assignTitle") String assignTitle,
+                                                      @RequestParam(value = "fileName") String filename,
+                                                      @RequestParam(value = "studentNo") String studentNo) {
+        Resource file = storageService.load(assignTitle, studentNo, filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
     @PostMapping("/delete")
     public ResponseEntity<ResponseMessage> deleteAll(){
         String message = "";

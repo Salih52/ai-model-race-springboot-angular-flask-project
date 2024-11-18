@@ -29,9 +29,9 @@
 
       <div class="card files mt-3">
           <div class="card-body">
-              <ul class="list-group list-group-flush">
-                  <li *ngFor="let file of adminFileInfos" class="list-group-item">
-                      <a href="{{ file.url }}">{{ file.name }}</a>
+              <ul class="d-flex flex-wrap">
+                  <li *ngFor="let file of adminFileInfos" class="list-group-item no-border">
+                    <button (click)="getFile(file.name)" class="btn btn-primary">{{ file.name }}</button>
                   </li>
               </ul>
           </div>
@@ -75,10 +75,10 @@
 
       <div *ngIf="fileInfos" class="card mt-5">
         <div class="card-body">
-          <h3 class="card-title">Yuklediğin Model</h3>
+          <h3 class="card-title">Yuklediğin Modelff</h3>
           <ul class="list-group list-group-flush">
             <li *ngFor="let file of fileInfos" class="list-group-item">
-              <a href="{{ file.url }}">{{ file.name }}</a>
+              <button (click)="getModelFile(file.name)" class="btn btn-primary">{{ file.name }}</button>
             </li>
           </ul>
         </div>
@@ -90,17 +90,3 @@
   </div>  
 
 </div>
-
-<ng-template #modelUploaded>
-
-  <div *ngIf="fileInfos" class="card mt-5">
-    <div class="card-body">
-      <h3 class="card-title">Yuklediğin Model</h3>
-      <ul class="list-group list-group-flush">
-        <li *ngFor="let file of fileInfos" class="list-group-item">
-          <a href="{{ file.url }}">{{ file.name }}</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</ng-template>

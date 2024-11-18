@@ -29,13 +29,13 @@
 
         <div class="card files mt-3">
             <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li *ngFor="let file of fileInfos" class="list-group-item">
-                        <a href="{{ file.url }}">{{ file.name }}</a>
-                    </li>
-                </ul>
+              <ul class="d-flex flex-wrap">
+                <li *ngFor="let file of fileInfos" class="list-group-item no-border">
+                  <button (click)="getFile(file.name)" class="btn btn-primary me-2">{{ file.name }}</button>
+                </li>
+              </ul>
             </div>
-        </div>
+          </div>
     </div>
 
     <div class="toolBox">

@@ -47,6 +47,17 @@ export class FileService {
     });
   }
 
+  downloadModelFile(fileName: string , assignTitle: string , studentNo : string): Observable<Blob> {
+    const formData: FormData = new FormData();
+    formData.append('fileName', fileName);
+    formData.append('assignTitle', assignTitle);
+    formData.append('studentNo', studentNo);
+
+    return this.http.post(`${this.baseUrl}/downloadModel`, formData, {
+      responseType: 'blob'
+    });
+  }
+
 
   uploadUser(file: FileList, title:string , assignTitle:string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();

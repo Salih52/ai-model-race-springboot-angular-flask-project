@@ -63,15 +63,22 @@ export class AssignPageComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
-  getFile(file: string) {
+  getFile(fileName: string) {
     if (this.assigns?.title) {
-      this.fileService.downloadFile(file, this.assigns?.title).subscribe(
+      this.fileService.downloadFile(fileName, this.assigns?.title).subscribe(
         (response) => {
-          const blob = new Blob([response], {
-            type: 'application/octet-stream',
-          });
+          const contentType = fileName.split('.').pop();
+          let filename = fileName;
+
+          const blob = new Blob([response], { type: contentType });
           const url = window.URL.createObjectURL(blob);
-          window.open(url);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
         },
         (error) => {
           console.error('Dosya indirilirken bir hata oluştu:', error);
