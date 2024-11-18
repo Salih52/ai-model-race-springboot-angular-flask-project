@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.ClassificationScoresDto;
+import com.example.backend.dto.RegressionScoresDto;
 import com.example.backend.messages.ResponseMessage;
 import com.example.backend.services.AssignService;
 import com.example.backend.dto.AssignDto;
@@ -47,10 +48,17 @@ public class AssignsController {
         }
     }
 
-    @PostMapping("/getScoreList")
-    public ResponseEntity<List<ClassificationScoresDto>> getScoreList(@RequestParam(value = "tableName") String tableName){
-         return ResponseEntity.ok(assignService.getAllRecordsSortedByMetric(tableName));
+    @PostMapping("/getClassificationScoreList")
+    public ResponseEntity<List<ClassificationScoresDto>> getClassificationScoreList(@RequestParam(value = "tableName") String tableName){
+         return ResponseEntity.ok(assignService.getClassificationRecordsSortedByMetric(tableName));
     }
+
+    @PostMapping("/getRegressionScoreList")
+    public ResponseEntity<List<RegressionScoresDto>> getRegressionScoreList(@RequestParam(value = "tableName") String tableName){
+        return ResponseEntity.ok(assignService.getRegressionRecordsSortedByMetric(tableName));
+    }
+
+
 
     @PostMapping("/endAssign")
     public  ResponseEntity<ResponseMessage> endAssign(@RequestParam(value = "title") String title){

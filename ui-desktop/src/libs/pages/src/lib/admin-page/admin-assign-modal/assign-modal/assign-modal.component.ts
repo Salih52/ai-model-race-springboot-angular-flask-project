@@ -22,10 +22,18 @@ export class AssignModalComponent  implements OnInit{
   scoreList: ScoreModel[] = [];
 
   ngOnInit(): void {
-    this.assignSerice.getScoreList(this.data.assigns).subscribe(
-      data => this.scoreList = data,
-      error => console.error('Hata:',error)
-    );
+    if(this.data.assigns.competitionType == "classification"){
+      this.assignSerice.getClassificationScoreList(this.data.assigns.title).subscribe(
+        data => this.scoreList = data,
+        error => console.error('Hata:',error)
+      );
+    }
+    else if(this.data.assigns.competitionType == "regression"){
+      this.assignSerice.getRegressionScoreList(this.data.assigns.title).subscribe(
+        data => this.scoreList = data,
+        error => console.error('Hata:',error)
+      );
+    }
   }
 
   exportExcel(){

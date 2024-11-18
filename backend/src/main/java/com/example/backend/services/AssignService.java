@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.AssignDto;
 import com.example.backend.dto.ClassificationScoresDto;
+import com.example.backend.dto.RegressionScoresDto;
 import com.example.backend.entity.Assign;
 import com.example.backend.repository.AssignRepository;
 import com.example.backend.user.User;
@@ -136,40 +137,37 @@ public class AssignService {
     }
 
     @Transactional
-    public List<ClassificationScoresDto> getAllRecordsSortedByMetric(String tableName) {
-        String competitionType = getAssignByTitle(tableName).getCompetitionType();
+    public List<ClassificationScoresDto> getClassificationRecordsSortedByMetric(String tableName) {
         tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
-        String sql = "";
-        if ("classification".equals(competitionType)) {
-            sql = "SELECT studentNo, accuracy, f1Score, precision, recall FROM " + tableName + " ORDER BY f1Score DESC";
-        } else if ("regression".equals(competitionType)) {
-            sql = "SELECT studentNo, meanAbsoluteError, meanSquaredError, r2Score FROM " + tableName + " ORDER BY r2Score DESC";
-        }
-
+        String sql = "SELECT studentNo, accuracy, f1Score, precision, recall FROM " + tableName + " ORDER BY f1Score DESC";
         Query query = entityManager.createNativeQuery(sql);
         List<Object[]> results = query.getResultList();
 
         return results.stream()
-                .map(result -> {
-                    if ("classification".equals(competitionType)) {
-                        return new ClassificationScoresDto(
-                                (String) result[0],
-                                (Double) result[1],
-                                (Double) result[2],
-                                (Double) result[3],
-                                (Double) result[4]
-                        );
-                    } else if ("regression".equals(competitionType)) {
-                        return new ClassificationScoresDto(
-                                (String) result[0],
-                                (Double) result[1],
-                                (Double) result[2],
-                                (Double) result[3],
-                                null // regression might not have precision/recall
-                        );
-                    }
-                    return null; // Default fallback, should not reach here
-                })
+                .map(result -> new ClassificationScoresDto(
+                        (String) result[0],
+                        (Double) result[1],
+                        (Double) result[2],
+                        (Double) result[3],
+                        (Double) result[4]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<RegressionScoresDto> getRegressionRecordsSortedByMetric(String tableName) {
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        String sql = "SELECT studentNo, meanAbsoluteError, meanSquaredError, r2Score FROM " + tableName + " ORDER BY r2Score DESC";
+        Query query = entityManager.createNativeQuery(sql);
+        List<Object[]> results = query.getResultList();
+
+        return results.stream()
+                .map(result -> new RegressionScoresDto(
+                        (String) result[0],
+                        (Double) result[1],
+                        (Double) result[2],
+                        (Double) result[3]
+                ))
                 .collect(Collectors.toList());
     }
 

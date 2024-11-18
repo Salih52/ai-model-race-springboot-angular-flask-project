@@ -3,12 +3,12 @@
   <button class="btn btn-info" (click)="exportExcel()">Excele Dönüştür</button>
 </header>
 
-<div *ngIf="scoreList.length != 0; else noScoreList">
+<div *ngIf="data.assigns.competitionType == 'classification'">
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>
         <th>#</th>
-        <th>Öğrenci No</th>
+        <th>Öğrenci Nooo</th>
         <th>Accuracy</th>
         <th>F1 Score</th>
         <th>Precision</th>
@@ -23,6 +23,29 @@
         <td>{{ user.f1Score }}</td>
         <td>{{ user.precision }}</td>
         <td>{{ user.recall }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="data.assigns.competitionType == 'regression'">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Öğrenci No</th>
+        <th>Mean Absolute Error</th>
+        <th>Mean Squared Error</th>
+        <th>r2 Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of scoreList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ user.studentNo }}</td>
+        <td>{{ user.accuracy }}</td>
+        <td>{{ user.f1Score }}</td>
+        <td>{{ user.precision }}</td>
       </tr>
     </tbody>
   </table>

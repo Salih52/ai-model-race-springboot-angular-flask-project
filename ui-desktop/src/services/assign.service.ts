@@ -28,9 +28,14 @@ export class AssignService {
     return this.http.delete(`${this.baseUrl}/delete/${assign.id}`);
   }
 
-  getScoreList(tableName: string): Observable<ScoreModel[]> {
+  getClassificationScoreList(tableName: string): Observable<ScoreModel[]> {
     const params = new HttpParams().set('tableName', tableName);
-    return this.http.post<ScoreModel[]>(`${this.baseUrl}/getScoreList`, params );
+    return this.http.post<ScoreModel[]>(`${this.baseUrl}/getClassificationScoreList`, params );
+  }
+
+  getRegressionScoreList(tableName: string): Observable<ScoreModel[]> {
+    const params = new HttpParams().set('tableName', tableName);
+    return this.http.post<ScoreModel[]>(`${this.baseUrl}/getRegressionScoreList`, params );
   }
 
   endAssign(title:string){
