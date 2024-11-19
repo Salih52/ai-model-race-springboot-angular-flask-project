@@ -1,10 +1,7 @@
-db ye gimek için: docker-compose exec db psql -U postgres -d postgres
+AilabRace'e Hoş Geldiniz!
 
-build için: docker-compose up --build
+AilabRace, kullanıcıların farklı türlerdeki yapay zeka modellerini diğer kullanıcılarla test edebileceği bir platformdur. Sisteme kayıt olduktan sonra bir yarışmaya katılabilirsiniz. Katıldığınız yarışmada verilen veri seti ile modelinizi eğitir ve ardından bu modeli sisteme yüklersiniz. Sistem, yüklediğiniz modeli yarışma için sağlanan veri seti üzerinde test eder.
 
-bir container için build: docker-compose up --build -d <name>
+Skorlar, yarışma türüne göre değişiklik göstermektedir. Örneğin, sınıflandırma yarışmalarında başarı, accuracy (doğruluk oranı) ile ölçülürken; regresyon yarışmalarında başarı, R² skoru ile değerlendirilir. Yarışma tamamlandıktan sonra, elde ettiğiniz skorları görebilir ve diğer ilgili metriklere ulaşabilirsiniz.
 
-
-url: jdbc:postgresql://db:5432/postgres
-
-url: jdbc:postgresql://localhost:5432/data
+Admin kullanıcıları ise yarışmaları oluşturma, düzenleme ve sonuçları görüntüleme gibi ek yetkilere sahiptir.
