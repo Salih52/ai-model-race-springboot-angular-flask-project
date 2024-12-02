@@ -8,6 +8,7 @@ import { VeriService } from 'src/services/auth.service';
 import { FileService } from 'src/services/file.service';
 import { ResultsPageComponent } from './results-page/results-page.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { PreProcessComponent } from '../../user-page/user-assign-modal/pre-process/pre-process.component';
 
 @Component({
   selector: 'app-assign-page',
@@ -86,6 +87,23 @@ export class AssignPageComponent implements OnInit {
         }
       );
     }
+  }
+
+  preProcessCode: string = '';
+
+  getPreProcessCode(): void {
+    const dialogRef = this.dialogRef.open(PreProcessComponent, {
+      width: '1000px',
+      height: '700px',
+      data: { code: this.preProcessCode }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.preProcessCode = result;
+        alert('Ön işlem kodu başarıyla kaydedildi');
+      }
+    });
   }
 
   showResults() {

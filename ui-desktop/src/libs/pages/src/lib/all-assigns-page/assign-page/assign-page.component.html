@@ -45,6 +45,9 @@
             </div>  
                 <button *ngIf="assigns?.status == 'active'" class="btn btn-lg btn-info mt-4" [routerLink]="['/login']">Login</button>
                 <button  *ngIf="assigns?.status == 'inactive'"  (click)="showResults()" class="btn btn-lg btn-success mt-4" >Sonuçları Göster</button>
+                <button  (click)="getPreProcessCode()" class="btn btn-lg mt-4 btn-success">
+                    Ön-İşleme
+                  </button>
         </div>
     </div>
 
