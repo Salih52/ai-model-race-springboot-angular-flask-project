@@ -12,6 +12,10 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 flask:
   api:
