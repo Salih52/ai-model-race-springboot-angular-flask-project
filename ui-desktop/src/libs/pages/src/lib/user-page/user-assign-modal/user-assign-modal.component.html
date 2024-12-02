@@ -1,92 +1,123 @@
 <div *ngIf="assigns" class="container body d-flex justify-content-between">
-  <div class="card content" >
-      <div class="card-header">
-          <h1 class="title">{{assigns.title}}</h1>
-          <div class="d-flex justify-content-between" *ngIf="assigns.status == 'active' ">
-            <h3>{{assigns.startDate | date: 'dd/MM/yyyy'}} - 
-            {{assigns.endDate | date: 'dd/MM/yyyy'}}</h3>
-            <h2  class="text-success">Yarışma Devam Etmektedir</h2>
+  <div class="card content">
+    <div class="card-header">
+      <h1 class="title">{{ assigns.title }}</h1>
+      <div
+        class="d-flex justify-content-between"
+        *ngIf="assigns.status == 'active'"
+      >
+        <h3>
+          {{ assigns.startDate | date : "dd/MM/yyyy" }} -
+          {{ assigns.endDate | date : "dd/MM/yyyy" }}
+        </h3>
+        <h2 class="text-success">Yarışma Devam Etmektedir</h2>
+      </div>
+      <div
+        class="d-flex justify-content-center"
+        *ngIf="assigns.status == 'inactive'"
+      >
+        <h2 class="text-danger">Yarışma Bitmiştir</h2>
+      </div>
+      <div
+        class="d-flex justify-content-center"
+        *ngIf="assigns?.competitionType == 'classification'"
+      >
+        <h2 class="text-info">Yarişma Türü: Sınıflandırma</h2>
+      </div>
+      <div
+        class="d-flex justify-content-center"
+        *ngIf="assigns?.competitionType == 'regression'"
+      >
+        <h2 class="text-info">Yarişma Türü: Regresyon</h2>
+      </div>
+    </div>
+    <div class="card-body">
+      <h2>{{ assigns.subtitle }}</h2>
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ assigns.description }}</h4>
         </div>
-        <div class="d-flex justify-content-center" *ngIf="assigns.status == 'inactive' ">
-            <h2  class="text-danger">Yarışma Bitmiştir</h2>
-        </div>
-        <div class="d-flex justify-content-center" *ngIf="assigns?.competitionType == 'classification' ">
-          <h2  class="text-info">Yarişma Türü: Sınıflandırma</h2>
       </div>
-      <div class="d-flex justify-content-center" *ngIf="assigns?.competitionType == 'regression' ">
-          <h2  class="text-info">Yarişma Türü: Regresyon</h2>
-      </div>
-      </div>
-      <div class="card-body">
-          
-          <h2>{{assigns.subtitle}}</h2>
-          <div class="card">
-              <div class="card-body">
-                  <h4 class="card-title">{{assigns.description}}</h4>
-              </div>
-          </div>
-      </div>
+    </div>
 
-      <div class="card files mt-3">
-          <div class="card-body">
-              <ul class="d-flex flex-wrap">
-                  <li *ngFor="let file of adminFileInfos" class="list-group-item no-border">
-                    <button (click)="getFile(file.name)" class="btn btn-primary">{{ file.name }}</button>
-                  </li>
-              </ul>
-          </div>
+    <div class="card files mt-3">
+      <div class="card-body">
+        <ul class="d-flex flex-wrap">
+          <li
+            *ngFor="let file of adminFileInfos"
+            class="list-group-item no-border"
+          >
+            <button (click)="getFile(file.name)" class="btn btn-primary">
+              {{ file.name }}
+            </button>
+          </li>
+        </ul>
       </div>
+    </div>
   </div>
 
   <div class="buttons">
-      <div *ngIf="assigns?.status == 'active' && !fileInfos" class="card bg-transparent">
-          <div class="card-header border-warning">
-              <h4 class="text-white">Modeliniz yüklendikten sonra scorlarınız sisteme kayıt edilecektir başarılar...</h4>
-          </div>  
-          <label for="assignmentFile" class="mt-4 form-control file-label">Dosya Seç</label>
-          <input id="assignmentFile" class="form-control d-none" multiple type="file" (change)="selectFile($event)">
-          <div *ngIf="selectedFiles && selectedFiles.length > 0">
-            <h4 class="text-white">Seçilen Model:</h4>
-            <ul>
-              <li *ngFor="let file of printFiles" class="text-white">
-                {{ file.name }} - {{ file.size }} bytes
-              </li>
-            </ul>
-          </div>
-          <button
-            class="btn upload"
-            [disabled]="!selectedFiles"
-            (click)="upload()"
-          >
-            Modeli Yükle
-          </button>
-
-          <div
-            class="progress-bar progress-bar-info progress-bar-striped"
-            role="progressbar"
-            attr.aria-valuenow="{{ progress }}"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            [ngStyle]="{ width: progress + '%' }"
-        >
-          {{ progress }}%
-        </div>
+    <div
+      *ngIf="assigns?.status == 'active' && !fileInfos"
+      class="card bg-transparent"
+    >
+      <div class="card-header border-warning">
+        <h4 class="text-white">
+          Modeliniz yüklendikten sonra scorlarınız sisteme kayıt edilecektir.
+          Eğer bir ön işleme yaptıysanız lütfen aşağıdaki Ön işleme kısmına
+          basın. Başarılar...
+        </h4>
+        <h4 class="text-warning">Lütfen Tüm modellerinizi eğitirken scikit-learn 1.5 sürümünü kullanınız. Modelleriniz pickle uzantılı olmak zorundadır. 
+          <p>
+          <a class="text-info" target=”_blank” href="https://scikit-learn.org/1.5/install.html">scikit-learn 1.5 için buraya tıklayın.</a>
+        </h4>
       </div>
-
-      <div *ngIf="fileInfos" class="card mt-5">
-        <div class="card-body">
-          <h3 class="card-title">Yuklediğin Modelff</h3>
-          <ul class="list-group list-group-flush">
-            <li *ngFor="let file of fileInfos" class="list-group-item">
-              <button (click)="getModelFile(file.name)" class="btn btn-primary">{{ file.name }}</button>
-            </li>
-          </ul>
-        </div>
+      <label for="assignmentFile" class="mt-4 form-control file-label"
+        >Dosya Seç</label
+      >
+      <input
+        id="assignmentFile"
+        class="form-control d-none"
+        multiple
+        type="file"
+        (change)="selectFile($event)"
+      />
+      <div *ngIf="selectedFiles && selectedFiles.length > 0">
+        <h4 class="text-white">Seçilen Model:</h4>
+        <ul>
+          <li *ngFor="let file of printFiles" class="text-white">
+            {{ file.name }} - {{ file.size }} bytes
+          </li>
+        </ul>
       </div>
-
-      <button *ngIf="assigns.status == 'inactive'" (click)="showResults()" class="btn btn-lg mt-4 btn-success  ">
-        Sonuçları Gör
+      <button class="btn upload" [disabled]="!selectedFiles" (click)="upload()">
+        Modeli Yükle
       </button>
-  </div>  
+    </div>
 
+    <div *ngIf="fileInfos" class="card mt-5">
+      <div class="card-body">
+        <h3 class="card-title">Yuklediğin Modelff</h3>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let file of fileInfos" class="list-group-item">
+            <button (click)="getModelFile(file.name)" class="btn btn-primary">
+              {{ file.name }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <button
+      *ngIf="assigns.status == 'inactive'"
+      (click)="showResults()"
+      class="btn btn-lg mt-4 btn-success"
+    >
+      Sonuçları Gör
+    </button>
+
+    <button  (click)="getPreProcessCode()" class="btn btn-lg mt-4 btn-success">
+      Ön-İşleme
+    </button>
+  </div>
 </div>

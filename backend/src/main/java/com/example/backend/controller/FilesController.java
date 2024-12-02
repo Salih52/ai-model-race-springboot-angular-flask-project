@@ -35,7 +35,7 @@ public class FilesController {
     private  final RestTemplate restTemplate;
     @Autowired
     FileStorageService storageService;
-
+    private final FileStorageService fileStorageService;
     private final AssignService assignService;
     @Value("${flask.api.url}")
     private String flaskApiUrl;
@@ -79,7 +79,8 @@ public class FilesController {
     @PostMapping("/uploadUser")
     public ResponseEntity<ResponseMessage> uploadFilesUser(@RequestParam(value = "file") MultipartFile[] files,
                                                            @RequestParam(value = "title") String title,
-                                                           @RequestParam(value = "assignTitle") String assignTitle) {
+                                                           @RequestParam(value = "assignTitle") String assignTitle,
+                                                           @RequestParam(value = "preProcessCode") String preProcessCode) {
         final ObjectMapper objectMapper = new ObjectMapper();
         String message = "";
         try {
@@ -106,23 +107,28 @@ public class FilesController {
 
             if (dataPath != null && modelPath != null) {
                 // getModelScore metodunu çağır
-                String flaskResponse = getModelScore(dataPath, modelPath , competitionType);
-                try {
-                    if (competitionType.equals("classification")){
-                        ClassificationScoresDto result = objectMapper.readValue(flaskResponse, ClassificationScoresDto.class);
-                        result.setStudentNo(title);
-                        assignService.insertClassificationData(assignTitle,result.getStudentNo(), result.getAccuracy(), result.getF1Score(), result.getPrecision(), result.getRecall());
-                    } else if (competitionType.equals("scores")) {
-                        RegressionScoresDto result = objectMapper.readValue(flaskResponse, RegressionScoresDto.class);
-                        result.setStudentNo(title);
-                        assignService.insertRegressionData(assignTitle,result.getStudentNo(), result.getMeanAbsoluteError(), result.getMeanSquaredError(), result.getR2Score() );
-                    }
+                String flaskResponse = getModelScore(dataPath, modelPath , competitionType , title , assignTitle , preProcessCode);
+                if (flaskResponse.contains("Internal Server Error: ")){
+                    message = "Loaded object is not a valid model";
+                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+                }else {
+                    try {
+                        if (competitionType.equals("classification")){
+                            ClassificationScoresDto result = objectMapper.readValue(flaskResponse, ClassificationScoresDto.class);
+                            result.setStudentNo(title);
+                            assignService.insertClassificationData(assignTitle,result.getStudentNo(), result.getAccuracy(), result.getF1Score(), result.getPrecision(), result.getRecall());
+                        } else if (competitionType.equals("scores")) {
+                            RegressionScoresDto result = objectMapper.readValue(flaskResponse, RegressionScoresDto.class);
+                            result.setStudentNo(title);
+                            assignService.insertRegressionData(assignTitle,result.getStudentNo(), result.getMeanAbsoluteError(), result.getMeanSquaredError(), result.getR2Score() );
+                        }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    message = "Uploaded the files successfully: " + fileNames + " and Flask response: " + flaskResponse;
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
                 }
-                message = "Uploaded the files successfully: " + fileNames + " and Flask response: " + flaskResponse;
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
             } else {
                 message = "Files uploaded but dataPath or modelPath is missing!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
@@ -229,13 +235,14 @@ public class FilesController {
 
     @PostMapping("/getScore")
     @ResponseBody
-    public String getModelScore(String dataPath , String modelPath , String competitionType){
+    public String getModelScore(String dataPath , String modelPath , String competitionType ,String studentNo , String assignTitle , String preProcessCode) {
         //String jsonData = "{\"veriYolu\": \"C:\\Users\\salih\\Desktop\\project\\python\\train.csv\", \"modelYolu\": \"C:\\Users\\salih\\Desktop\\project\\python\\model1_gb.pkl.csv\"}";
 
         JSONObject jo = new JSONObject();
         jo.put("dataPath", dataPath);
         jo.put("modelPath", modelPath);
         jo.put("competitionType" , competitionType);
+        jo.put("preProcessCode", preProcessCode);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -247,6 +254,7 @@ public class FilesController {
             return restTemplate.postForObject(flaskApiUrl, request, String.class);
         } catch (RestClientException e) {
             // Hata durumunda loglama ve uygun yanıt döndürme
+            fileStorageService.deleteUserFile(studentNo, assignTitle);
             e.printStackTrace();
             return "Internal Server Error: " + e.getMessage() + jo;
         }

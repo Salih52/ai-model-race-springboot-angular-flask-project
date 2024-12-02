@@ -11,6 +11,7 @@ import { VeriService } from 'src/services/auth.service';
 import { FileService } from 'src/services/file.service';
 import { ResultsPageComponent } from '../../all-assigns-page/assign-page/results-page/results-page.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PreProcessComponent } from './pre-process/pre-process.component';
 
 @Component({
   selector: 'app-user-assign-modal',
@@ -27,6 +28,7 @@ export class UserAssignModalComponent implements OnInit {
   fileInfos?: FileModel[] | undefined;
   adminFileInfos?: FileModel[] | undefined;
   student: AuthResponse | null;
+  preProcessCode: string = '';
 
   private route = inject(ActivatedRoute);
   assigns?: AssignModel;
@@ -131,41 +133,50 @@ export class UserAssignModalComponent implements OnInit {
         );
     }
   }
+
+  getPreProcessCode(): void {
+    const dialogRef = this.dialogRef.open(PreProcessComponent, {
+      width: '1000px',
+      height: '700px',
+      data: { code: this.preProcessCode }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.preProcessCode = result;
+        alert('Ön işlem kodu başarıyla kaydedildi');
+      }
+    });
+  }
+
+
   selectFile(event: any): void {
     this.printFiles = Array.from(event.target.files);
     this.selectedFiles = event.target.files;
   }
 
   upload(): void {
-    this.progress = 0;
-    console.log("no:"+this.studentNo)
     if (this.selectedFiles) {
       if (this.selectedFiles && this.studentNo && this.assigns?.title) {
         this.fileService
-          .uploadUser(this.selectedFiles, this.studentNo, this.assigns?.title)
+          .uploadUser(this.selectedFiles, this.studentNo, this.assigns?.title , this.preProcessCode)
           .subscribe({
             next: (event: any) => {
               if (event.type === HttpEventType.UploadProgress) {
-                this.progress = Math.round((100 * event.loaded) / event.total);
                 window.location.reload();
-                alert("Modelin Başarıyla Yüklendi")
               } else if (event instanceof HttpResponse) {
                 this.message = event.body.message;
-                // this.fileInfos = this.fileService.getFiles("123");
               }
             },
             error: (err: any) => {
               console.log(err);
-              this.progress = 0;
-
-              if (err.error && err.error.message) {
-                this.message = err.error.message;
-              } else {
-                this.message = 'Could not upload the file!';
-              }
-
+              alert("Modelin Yüklenirken Bir Hata Oluştu")
+              window.location.reload();
               this.currentFile = undefined;
             },
+            complete: () => {
+              alert("Modelin Başarıyla Yüklendi")
+            }
           });
       }
 

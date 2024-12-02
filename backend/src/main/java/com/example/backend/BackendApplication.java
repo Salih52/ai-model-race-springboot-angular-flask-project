@@ -32,7 +32,7 @@ public class BackendApplication implements CommandLineRunner {
 					.firstName("Admin")
 					.lastName("Admin")
 					.email("admin@mail.com")
-					.password("admin")
+					.password("adminailab987")
 					.role(ADMIN)
 					.build();
 			System.out.println("Admin token: " + service.register(admin).getAccessToken());

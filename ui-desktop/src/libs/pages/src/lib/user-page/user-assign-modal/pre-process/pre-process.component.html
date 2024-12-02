@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <h5 class="modal-title">Enter Pre-Process Code</h5>
+</div>
+<div class="modal-body">
+  <div class="mb-3">
+    <h4>
+      Eğer Modelini eğitmeden önce eğitim versinde ön işleme yapıtysanız ön
+      işleme methodunuzu buraya yapıştırınız.Eğer yapmadıysanız burayı boş bırakıp modelinizi direk yükleyin. Methodu yazarken aşağıdaki
+      kurallara lütfen uyunuz eğer method bunlara uygun değilse veya methodunuzu buraya koymassanız modeliniz
+      çalışmayacaktır
+      <p>
+        1 - Ön İşleme yapılacak veri setinin adı "df" olucaktır
+        <p>
+        2 - Methodunuzun adı "preprocessing" olmak zorundadır
+        <p>
+        3 - Eğer bir şey import ediyor iseniz bunu da ekleyin
+        <p>
+        4 - İzin verilen kütüphaneler: pandas, numpy, sklearn
+        <p>
+        5 - Methodunuzun sonucunu geri döndürmeyi unutmayın
+        <p>
+        örnek Code:
+        <pre>
+          <code>
+            from sklearn.preprocessing import StandardScaler
+            def preprocessing(df):
+                x = df.iloc[:, :10]  # İlk 10 özelliği seçiyoruz
+                x['memory_battery'] = x['memory'] * x['battery']
+                scaler = StandardScaler()
+                x = scaler.fit_transform(x)
+                return x
+          </code>
+        </pre>
+    </h4>
+    <label for="preProcessCode" class="form-label">Code</label>
+    <textarea
+      id="preProcessCode"
+      [(ngModel)]="data.code"
+      class="form-control"
+      rows="10"
+    ></textarea>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" (click)="onSaveClick()">
+    Save
+  </button>
+</div>

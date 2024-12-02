@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, mean_absolute_error, mean_squared_error, r2_score
+from sklearn.preprocessing import StandardScaler
 import pickle
+import joblib  
 
 app = Flask(__name__)
 
@@ -16,25 +18,31 @@ def veriAl():
         dataPath = data.get('dataPath')
         modelPath = data.get('modelPath')
         competitionType = data.get('competitionType')
-        
-        if not dataPath or not modelPath:
-            return jsonify({"error": "Missing dataPath or modelPath"}), 400
-
-        # Log the received data
-        print(f"Received dataPath: {dataPath}")
-        print(f"Received modelPath: {modelPath}")
-        print(f"Received competitionType: {competitionType}")
+        preProcessCode = data.get('preProcessCode')
 
         df = pd.read_csv(dataPath)
-        with open(modelPath, 'rb') as file:
-            model = pickle.load(file)
+        print(df.head())
+         # Apply preprocessing if preProcessCode is provided
+        if preProcessCode:
+            preProcessCode = preProcessCode.replace(u'\u00A0', ' ')
+            local_vars = {}
+            exec(preProcessCode, globals(), local_vars)
+            preprocessing = local_vars['preprocessing']
+            df = preprocessing(df)
+            print("**************************************************")
+            print(df[:5])
+        else:
+            last_column = df.columns[-1]
+            X = df.drop([last_column], axis=1)
+            y_true = df[last_column]
 
-        last_column = df.columns[-1]
-        X = df.drop([last_column], axis=1)
-        y_true = df[last_column]
+        
+        # model = pickle.load(open(modelPath, 'rb'))
+        model1 = joblib.load(modelPath)
+        print(type(model1))
 
         if competitionType == "classification":
-            y_pred = model.predict(X)
+            y_pred = model1.predict(X)
 
             accuracy = accuracy_score(y_true, y_pred)
             precision = precision_score(y_true, y_pred, average='weighted')

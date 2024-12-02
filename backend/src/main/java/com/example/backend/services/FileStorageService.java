@@ -26,4 +26,5 @@ public interface FileStorageService {
     public String getModelPath(String assignTitle, String studentNo);
     public void createDirectory(String assignTitle);
     public void deleteDirectory(String title);
+    public void deleteUserFile(String studentNo , String assignTitle);
 }

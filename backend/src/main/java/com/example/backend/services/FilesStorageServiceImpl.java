@@ -291,5 +291,46 @@ public class FilesStorageServiceImpl implements FileStorageService {
 
     }
 
+    @Override
+    public void  deleteUserFile(String studentNo , String assignTitle) {
+        Path directory = user.resolve(assignTitle).resolve(studentNo);
+        if(Files.exists(directory)){
+            try {
+                Files.walk(directory)
+                        .sorted(Comparator.reverseOrder()) // Dosyaları ve dizinleri önce içten dışa doğru sıralar
+                        .forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                throw new RuntimeException("Failed to delete file: " + path, e);
+                            }
+                        });
+            } catch (NoSuchFileException e) {
+                throw new RuntimeException("No such directory: " + directory, e);
+            } catch (DirectoryNotEmptyException e) {
+                throw new RuntimeException("Directory is not empty: " + directory, e);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to delete directory: " + directory, e);
+            }
+            try {
+                Files.walk(directory)
+                        .sorted(Comparator.reverseOrder()) // Dosyaları ve dizinleri önce içten dışa doğru sıralar
+                        .forEach(path -> {
+                            try {
+                                Files.delete(path);
+                            } catch (IOException e) {
+                                throw new RuntimeException("Failed to delete file: " + path, e);
+                            }
+                        });
+            } catch (NoSuchFileException e) {
+                throw new RuntimeException("No such directory: " + directory, e);
+            } catch (DirectoryNotEmptyException e) {
+                throw new RuntimeException("Directory is not empty: " + directory, e);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to delete directory: " + directory, e);
+            }
+        }
+    }
+
 
 }

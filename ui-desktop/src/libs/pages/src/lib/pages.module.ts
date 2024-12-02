@@ -17,6 +17,7 @@ import { AllAssignsPageComponent } from './all-assigns-page/all-assigns-page.com
 import { AssignPageComponent } from './all-assigns-page/assign-page/assign-page.component';
 import { ResultsPageComponent } from './all-assigns-page/assign-page/results-page/results-page.component';
 import { ShowUsersModalComponent } from './admin-page/show-users-modal/show-users-modal.component';
+import { PreProcessComponent } from './user-page/user-assign-modal/pre-process/pre-process.component';
 
 
 
@@ -38,6 +39,7 @@ import { ShowUsersModalComponent } from './admin-page/show-users-modal/show-user
     AssignPageComponent,
     ResultsPageComponent,
     ShowUsersModalComponent,
+    PreProcessComponent,
   ],
   imports: [
     FormsModule,

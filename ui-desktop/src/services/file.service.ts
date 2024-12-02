@@ -59,7 +59,7 @@ export class FileService {
   }
 
 
-  uploadUser(file: FileList, title:string , assignTitle:string): Observable<HttpEvent<any>> {
+  uploadUser(file: FileList, title:string , assignTitle:string , preProcessCode:string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
     if(file.length > 0){
@@ -70,6 +70,7 @@ export class FileService {
 
     formData.append('title', title);
     formData.append('assignTitle', assignTitle);
+    formData.append('preProcessCode', preProcessCode);
 
     const req = new HttpRequest('POST', `${this.baseUrl}/uploadUser`, formData, {
       reportProgress: true,
