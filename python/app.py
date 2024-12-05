@@ -32,8 +32,6 @@ def veriAl():
             exec(preProcessCode, globals(), local_vars)
             preprocessing = local_vars['preprocessing']
             df = preprocessing(df)
-            print("**************************************************")
-            print(df[:5])
 
         
         # model = pickle.load(open(modelPath, 'rb'))
