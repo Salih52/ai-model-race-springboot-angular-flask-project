@@ -14,8 +14,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   servlet:
     multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 flask:
   api:
