@@ -20,7 +20,10 @@ def veriAl():
         competitionType = data.get('competitionType')
         preProcessCode = data.get('preProcessCode')
 
-        df = pd.read_csv(dataPath)
+        dfreal = pd.read_csv(dataPath)
+        last_column = dfreal.columns[-1]
+        df = dfreal.drop([last_column], axis=1)
+        y_true = dfreal[last_column]
         print(df.head())
          # Apply preprocessing if preProcessCode is provided
         if preProcessCode:
@@ -31,10 +34,6 @@ def veriAl():
             df = preprocessing(df)
             print("**************************************************")
             print(df[:5])
-        else:
-            last_column = df.columns[-1]
-            X = df.drop([last_column], axis=1)
-            y_true = df[last_column]
 
         
         # model = pickle.load(open(modelPath, 'rb'))
@@ -42,7 +41,7 @@ def veriAl():
         print(type(model1))
 
         if competitionType == "classification":
-            y_pred = model1.predict(X)
+            y_pred = model1.predict(df)
 
             accuracy = accuracy_score(y_true, y_pred)
             precision = precision_score(y_true, y_pred, average='weighted')
