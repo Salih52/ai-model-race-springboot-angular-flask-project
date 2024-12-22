@@ -48,7 +48,7 @@ def veriAl():
 
             return jsonify({"accuracy": accuracy, "precision": precision, "recall": recall, "f1Score": f1})
         elif competitionType == "regression":
-            y_pred = model.predict(X)
+            y_pred = model1.predict(df)
 
             mae = mean_absolute_error(y_true, y_pred)
             mse = mean_squared_error(y_true, y_pred)
