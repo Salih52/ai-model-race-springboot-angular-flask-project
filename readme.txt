@@ -1,19 +1,17 @@
-AilabRace'e Hoş Geldiniz!
+Welcome to AilabRace! AilabRace is a platform where users can test different types of AI models against other users. After registering in the system, you can join a competition. In the competition, you train your model with the provided dataset and then upload it to the system. The system tests your uploaded model on the dataset provided for the competition. Scores vary based on the type of competition. For example, success in classification competitions is measured by accuracy (accuracy rate), while success in regression competitions is evaluated by the R² score. After the competition is completed, you can see the scores you have achieved and access other related metrics. Admin users have additional permissions such as creating, editing, and viewing the results of the competitions.
 
-AilabRace, kullanıcıların farklı türlerdeki yapay zeka modellerini diğer kullanıcılarla test edebileceği bir platformdur. Sisteme kayıt olduktan sonra bir yarışmaya katılabilirsiniz. Katıldığınız yarışmada verilen veri seti ile modelinizi eğitir ve ardından bu modeli sisteme yüklersiniz. Sistem, yüklediğiniz modeli yarışma için sağlanan veri seti üzerinde test eder.
+Project Website: https://ailabrace.online/mainPage   **Website is not available for now.
 
-Skorlar, yarışma türüne göre değişiklik göstermektedir. Örneğin, sınıflandırma yarışmalarında başarı, accuracy (doğruluk oranı) ile ölçülürken; regresyon yarışmalarında başarı, R² skoru ile değerlendirilir. Yarışma tamamlandıktan sonra, elde ettiğiniz skorları görebilir ve diğer ilgili metriklere ulaşabilirsiniz.
+Technologies used in the project:
 
-Admin kullanıcıları ise yarışmaları oluşturma, düzenleme ve sonuçları görüntüleme gibi ek yetkilere sahiptir.
+--Angular
 
+--Spring Boot
 
-Projenin Sitesi :  https://ailabrace.online/mainPage
+--PostgreSQL
 
-Projede kullanılan teknolojiler:
+--Python Flask
 
--Angular
--Spring Boot
--PostgreSQL
--Python Flask
--Docker Container
--Nginx
+--Docker Container
+
+--Nginx
