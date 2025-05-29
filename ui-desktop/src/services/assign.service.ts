@@ -38,6 +38,11 @@ export class AssignService {
     return this.http.post<ScoreModel[]>(`${this.baseUrl}/getRegressionScoreList`, params );
   }
 
+  getDeepLearningScoreList(tableName: string): Observable<ScoreModel[]> {
+    const params = new HttpParams().set('tableName', tableName);
+    return this.http.post<ScoreModel[]>(`${this.baseUrl}/getDeepLearningScoreList`, params );
+  }
+
   endAssign(title:string){
     const params = new HttpParams().set('title', title);
     return this.http.post(`${this.baseUrl}/endAssign`,params);

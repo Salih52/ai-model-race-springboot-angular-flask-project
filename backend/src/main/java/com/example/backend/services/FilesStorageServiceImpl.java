@@ -1,6 +1,6 @@
 package com.example.backend.services;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.*;
@@ -10,7 +10,10 @@ import com.example.backend.entity.Assign;
 import com.example.backend.repository.AssignRepository;
 import com.example.backend.user.User;
 import com.example.backend.user.UserRepository;
+import io.github.palexdev.zip4j.ZipFile;
+import io.github.palexdev.zip4j.exception.ZipException;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -42,7 +45,7 @@ public class FilesStorageServiceImpl implements FileStorageService {
         String originalFilename = file.getOriginalFilename();
         if (originalFilename != null) {
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
-            List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "pdf", "xlsx", "pkl", "csv", "doc");
+            List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "pdf", "xlsx", "pkl", "csv", "doc","zip","rar","keras","joblib");
 
             if (!allowedExtensions.contains(fileExtension)) {
                 throw new RuntimeException("Dosya türü desteklenmiyor.");
@@ -75,6 +78,37 @@ public class FilesStorageServiceImpl implements FileStorageService {
             Path adminWithTitleDir = admin.resolve(title).resolve("test");
             Files.createDirectory(adminWithTitleDir);
             Files.copy(file.getInputStream(), adminWithTitleDir.resolve(Objects.requireNonNull(file.getOriginalFilename())));
+        } catch (Exception e) {
+            if (e instanceof FileAlreadyExistsException) {
+                throw new RuntimeException("A file of that name already exists.");
+            }
+
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void uploadTestImage(MultipartFile file,String title){
+        try {
+            Path adminWithTitleDir = admin.resolve(title).resolve("test");
+            Files.createDirectory(adminWithTitleDir);
+            File zip = File.createTempFile(UUID.randomUUID().toString(), "temp");
+            FileOutputStream o = new FileOutputStream(zip);
+            IOUtils.copy(file.getInputStream(), o);
+            o.close();
+
+            String destination = adminWithTitleDir.toString();
+            try {
+                ZipFile zipFile = new ZipFile(zip);
+                zipFile.extractAll(destination);
+            } catch (ZipException e) {
+                e.printStackTrace();
+            } finally {
+                /**
+                 * delete temp file
+                 */
+                zip.delete();
+            }
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("A file of that name already exists.");
@@ -215,13 +249,24 @@ public class FilesStorageServiceImpl implements FileStorageService {
             return null;
         }
     }
+
     @Override
-    public String getModelPath(String assignTitle, String studentNo){
+    public String getDeepLearningDataPath(String assignTitle) {
+        Path p = admin.resolve(assignTitle).resolve("test");
+        try (Stream<Path> stream = Files.list(p)) {
+            Optional<Path> subDir = stream.filter(Files::isDirectory).findFirst();
+            return subDir.map(path -> path.toAbsolutePath().toString()).orElse("");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    @Override
+    public String getModelPath(String assignTitle, String studentNo) {
         Path p = user.resolve(assignTitle).resolve(studentNo);
         try (Stream<Path> files = Files.list(p)) {
             return files
                     .filter(file -> !Files.isDirectory(file))
-                    .filter(file -> file.toString().endsWith(".pkl"))
                     .map(file -> file.toAbsolutePath().toString())
                     .findFirst()
                     .orElse(null);
@@ -295,23 +340,6 @@ public class FilesStorageServiceImpl implements FileStorageService {
     public void  deleteUserFile(String studentNo , String assignTitle) {
         Path directory = user.resolve(assignTitle).resolve(studentNo);
         if(Files.exists(directory)){
-            try {
-                Files.walk(directory)
-                        .sorted(Comparator.reverseOrder()) // Dosyaları ve dizinleri önce içten dışa doğru sıralar
-                        .forEach(path -> {
-                            try {
-                                Files.delete(path);
-                            } catch (IOException e) {
-                                throw new RuntimeException("Failed to delete file: " + path, e);
-                            }
-                        });
-            } catch (NoSuchFileException e) {
-                throw new RuntimeException("No such directory: " + directory, e);
-            } catch (DirectoryNotEmptyException e) {
-                throw new RuntimeException("Directory is not empty: " + directory, e);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to delete directory: " + directory, e);
-            }
             try {
                 Files.walk(directory)
                         .sorted(Comparator.reverseOrder()) // Dosyaları ve dizinleri önce içten dışa doğru sıralar

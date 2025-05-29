@@ -1,9 +1,11 @@
 package com.example.backend.controller;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import com.example.backend.dto.ClassificationScoresDto;
+import com.example.backend.dto.DeepLearningDto;
 import com.example.backend.dto.RegressionScoresDto;
 import com.example.backend.entity.Assign;
 import com.example.backend.messages.ResponseMessage;
@@ -35,6 +37,7 @@ public class FilesController {
     private  final RestTemplate restTemplate;
     @Autowired
     FileStorageService storageService;
+    @Autowired
     private final FileStorageService fileStorageService;
     private final AssignService assignService;
     @Value("${flask.api.url}")
@@ -76,8 +79,52 @@ public class FilesController {
         }
     }
 
+    @PostMapping("/uploadImageAdmin")
+    public ResponseEntity<ResponseMessage> uploadAdminImageFiles(
+            @RequestParam(value = "file", required = false) MultipartFile[] files,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "testFile") MultipartFile[] testFile) {
+
+        String message = "";
+        storageService.createDirectory(title);
+
+        try {
+            List<String> fileNames = new ArrayList<>();
+
+            if (files != null) {
+                Arrays.asList(files).stream().forEach(file -> {
+                    storageService.save(file, title);
+                    fileNames.add(file.getOriginalFilename());
+                });
+            }
+
+            if (testFile != null) {
+                for (MultipartFile file : testFile) {
+                    String originalFilename = file.getOriginalFilename();
+                    if (originalFilename != null && originalFilename.endsWith(".zip")) {
+                        storageService.uploadTestImage(file,title);
+                    } else {
+                        storageService.save(file, title);
+                    }
+                }
+            }
+
+            if (!fileNames.isEmpty()) {
+                message = "Uploaded the files successfully: " + fileNames;
+            } else {
+                message = "No files to upload, but test files uploaded successfully.";
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        } catch (Exception e) {
+            message = "Fail to upload files!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }
+
+
     @PostMapping("/uploadUser")
-    public ResponseEntity<ResponseMessage> uploadFilesUser(@RequestParam(value = "file") MultipartFile[] files,
+    public ResponseEntity<ResponseMessage> uploadFilesUser(@RequestParam(value = "file" , required = false) MultipartFile[] files,
                                                            @RequestParam(value = "title") String title,
                                                            @RequestParam(value = "assignTitle") String assignTitle,
                                                            @RequestParam(value = "preProcessCode") String preProcessCode) {
@@ -97,44 +144,70 @@ public class FilesController {
                 // Burada dosya adlarını kontrol ederek dataPath ve modelPath'yi ayarlayın
 
 
-                if (file.getOriginalFilename().endsWith(".pkl")) {
+                if (file.getOriginalFilename().endsWith(".pkl") || file.getOriginalFilename().endsWith(".joblib")) {
                     modelPath = storageService.getModelPath(assignTitle,title);
                     dataPath = storageService.getDataPath(assignTitle);
                     competitionType = assign.getCompetitionType();
 
+                } else if (file.getOriginalFilename().endsWith(".keras")) {
+                    modelPath = storageService.getModelPath(assignTitle,title);
+                    dataPath = storageService.getDeepLearningDataPath(assignTitle);
+                    competitionType = assign.getCompetitionType();
+                } else {
+                    fileStorageService.deleteUserFile(title, assignTitle);
                 }
             }
 
             if (dataPath != null && modelPath != null) {
                 // getModelScore metodunu çağır
                 String flaskResponse = getModelScore(dataPath, modelPath , competitionType , title , assignTitle , preProcessCode);
-                if (flaskResponse.contains("Internal Server Error: ")){
-                    message = "Loaded object is not a valid model";
-                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
-                }else {
-                    try {
-                        if (competitionType.equals("classification")){
-                            ClassificationScoresDto result = objectMapper.readValue(flaskResponse, ClassificationScoresDto.class);
-                            result.setStudentNo(title);
-                            assignService.insertClassificationData(assignTitle,result.getStudentNo(), result.getAccuracy(), result.getF1Score(), result.getPrecision(), result.getRecall());
-                        } else if (competitionType.equals("scores")) {
-                            RegressionScoresDto result = objectMapper.readValue(flaskResponse, RegressionScoresDto.class);
-                            result.setStudentNo(title);
-                            assignService.insertRegressionData(assignTitle,result.getStudentNo(), result.getMeanAbsoluteError(), result.getMeanSquaredError(), result.getR2Score() );
+                if (flaskResponse.contains("Version Error: DecisionTreeClassifier is not supported")) {
+                    throw new RuntimeException("Version Error: DecisionTreeClassifier is not supported");
+                } else if (flaskResponse.contains("Internal Server Error")) {
+                    throw new RuntimeException("Loaded object is not a valid model");
+                }
+
+                        switch (competitionType) {
+                            case "classification" -> {
+                                ClassificationScoresDto result = objectMapper.readValue(flaskResponse, ClassificationScoresDto.class);
+                                result.setStudentNo(title);
+                                assignService.insertClassificationData(assignTitle, result.getStudentNo(), result.getAccuracy(), result.getF1Score(), result.getPrecision(), result.getRecall());
+                            }
+                            case "regression" -> {
+                                RegressionScoresDto result = objectMapper.readValue(flaskResponse, RegressionScoresDto.class);
+                                result.setStudentNo(title);
+                                assignService.insertRegressionData(assignTitle, result.getStudentNo(), result.getMeanAbsoluteError(), result.getMeanSquaredError(), result.getR2Score());
+                            }
+                            case "deepLearning" -> {
+                                DeepLearningDto result = objectMapper.readValue(flaskResponse, DeepLearningDto.class);
+                                result.setStudentNo(title);
+                                assignService.insertDeepLearningData(assignTitle, result.getStudentNo(), result.getAccuracy());
+                            }
+                            case "nlpClassification" -> {
+                                DeepLearningDto result = objectMapper.readValue(flaskResponse, DeepLearningDto.class);
+                                result.setStudentNo(title);
+                                assignService.insertNlpClassificationLearningData(assignTitle, result.getStudentNo(), result.getAccuracy());
+                            }
                         }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     message = "Uploaded the files successfully: " + fileNames + " and Flask response: " + flaskResponse;
                     return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
-                }
+
             } else {
                 message = "Files uploaded but dataPath or modelPath is missing!";
+                fileStorageService.deleteUserFile(title, assignTitle);
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
             }
         } catch (Exception e) {
-            message = "Fail to upload files!";
+            if (e.getMessage().contains("Internal Server Error:")) {
+                message = "Loaded object is not a valid model";
+            } else if (e.getMessage().contains("Version Error: DecisionTreeClassifier is not supported")) {
+                message = "Version Error: DecisionTreeClassifier is not supported. (Model Sürümünüz uyumsuz. Lütfen modelinizi belirtilen sürüm ile eğitiniz)";
+            } else {
+                message = "Fail to upload files! Error: " + e.getMessage();
+            }
+
+            fileStorageService.deleteUserFile(title, assignTitle);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
@@ -253,9 +326,9 @@ public class FilesController {
             // Flask API'den gelen sonucu döndürme
             return restTemplate.postForObject(flaskApiUrl, request, String.class);
         } catch (RestClientException e) {
-            // Hata durumunda loglama ve uygun yanıt döndürme
-            fileStorageService.deleteUserFile(studentNo, assignTitle);
-            e.printStackTrace();
+            if (e.getMessage() != null && e.getMessage().contains("DecisionTreeClassifier")) {
+                return "Version Error: DecisionTreeClassifier is not supported. " + jo;
+            }
             return "Internal Server Error: " + e.getMessage() + jo;
         }
     }

@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.ClassificationScoresDto;
+import com.example.backend.dto.DeepLearningDto;
 import com.example.backend.dto.RegressionScoresDto;
 import com.example.backend.messages.ResponseMessage;
 import com.example.backend.services.AssignService;
@@ -58,7 +59,15 @@ public class AssignsController {
         return ResponseEntity.ok(assignService.getRegressionRecordsSortedByMetric(tableName));
     }
 
+    @PostMapping("/getDeepLearningScoreList")
+    public ResponseEntity<List<DeepLearningDto>> getDeepLearningScoreList(@RequestParam(value = "tableName") String tableName){
+        return ResponseEntity.ok(assignService.getDeepLearningRecordsSortedByMetric(tableName));
+    }
 
+    @PostMapping("/getNlpClassificationScoreList")
+    public ResponseEntity<List<DeepLearningDto>> getNlpClassificationScoreList(@RequestParam(value = "tableName") String tableName){
+        return ResponseEntity.ok(assignService.getNlpClassificationRecordsSortedByMetric(tableName));
+    }
 
     @PostMapping("/endAssign")
     public  ResponseEntity<ResponseMessage> endAssign(@RequestParam(value = "title") String title){

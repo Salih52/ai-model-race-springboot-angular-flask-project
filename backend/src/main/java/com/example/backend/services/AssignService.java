@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.AssignDto;
 import com.example.backend.dto.ClassificationScoresDto;
+import com.example.backend.dto.DeepLearningDto;
 import com.example.backend.dto.RegressionScoresDto;
 import com.example.backend.entity.Assign;
 import com.example.backend.repository.AssignRepository;
@@ -104,6 +105,19 @@ public class AssignService {
                     + "meanSquaredError FLOAT, "
                     + "r2Score FLOAT"
                     + ")";
+        } else if (assign.getCompetitionType().equals("deepLearning")) {
+            sql = "CREATE TABLE " + tableName + " ("
+                    + "id BIGSERIAL PRIMARY KEY, "
+                    + "studentNo VARCHAR(255), "
+                    + "accuracy FLOAT"
+                    + ")";
+        }
+        else if (assign.getCompetitionType().equals("nlpClassification")) {
+            sql = "CREATE TABLE " + tableName + " ("
+                    + "id BIGSERIAL PRIMARY KEY, "
+                    + "studentNo VARCHAR(255), "
+                    + "accuracy FLOAT"
+                    + ")";
         }
 
         entityManager.createNativeQuery(sql).executeUpdate();
@@ -134,6 +148,30 @@ public class AssignService {
                 .setParameter(4, r2Score)
                 .executeUpdate();
 
+    }
+
+    @Transactional
+    public void insertDeepLearningData(String tableName, String studentNo, Double accuracy) {
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+
+        String sql = "";
+        sql = "INSERT INTO " + tableName + " (studentNo, accuracy) VALUES (?, ?)";
+        entityManager.createNativeQuery(sql)
+                .setParameter(1, studentNo)
+                .setParameter(2, accuracy)
+                .executeUpdate();
+    }
+
+    @Transactional
+    public void insertNlpClassificationLearningData(String tableName, String studentNo, Double accuracy) {
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+
+        String sql = "";
+        sql = "INSERT INTO " + tableName + " (studentNo, accuracy) VALUES (?, ?)";
+        entityManager.createNativeQuery(sql)
+                .setParameter(1, studentNo)
+                .setParameter(2, accuracy)
+                .executeUpdate();
     }
 
     @Transactional
@@ -170,6 +208,36 @@ public class AssignService {
                 ))
                 .collect(Collectors.toList());
     }
+    @Transactional
+    public List<DeepLearningDto> getDeepLearningRecordsSortedByMetric(String tableName) {
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        String sql = "SELECT studentNo, accuracy FROM " + tableName + " ORDER BY accuracy DESC";
+        Query query = entityManager.createNativeQuery(sql);
+        List<Object[]> results = query.getResultList();
+
+        return results.stream()
+                .map(result -> new DeepLearningDto(
+                        (String) result[0],
+                        (Double) result[1]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<DeepLearningDto> getNlpClassificationRecordsSortedByMetric(String tableName) {
+        tableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        String sql = "SELECT studentNo, accuracy FROM " + tableName + " ORDER BY accuracy DESC";
+        Query query = entityManager.createNativeQuery(sql);
+        List<Object[]> results = query.getResultList();
+
+        return results.stream()
+                .map(result -> new DeepLearningDto(
+                        (String) result[0],
+                        (Double) result[1]
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 
     @Transactional

@@ -1,0 +1,133 @@
+<div *ngIf="!data else UpdateAssign" class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Yeni Bir Assign Oluştur</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #assignForm="ngForm" (ngSubmit)="onSubmit(assignForm)" novalidate>
+          <div class="form-group mb-3">
+            <label for="title">Başlık</label>
+            <input type="text" [(ngModel)]="titleee" name="title" class="form-control" id="title" required #title="ngModel">
+            <div *ngIf="title.invalid && title.touched" class="text-danger">Başlık gerekli.</div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="subtitle">Alt Başlık</label>
+            <textarea name="subtitle" ngModel class="form-control" id="subtitle" rows="2"  #subtitle="ngModel"></textarea>
+            <div *ngIf="subtitle.invalid && subtitle.touched" class="text-danger">Alt Başlık gerekli.</div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="description">Açıklama</label>
+            <textarea name="description" ngModel id="description" class="form-control" rows="5"  #description="ngModel"></textarea>
+            <div *ngIf="description.invalid && description.touched" class="text-danger">Açıklama gerekli.</div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="startDate">Başlangıç Tarihi</label>
+            <input type="date" ngModel name="startDate" class="form-control" id="startDate"  #startDate="ngModel">
+            <div *ngIf="startDate.invalid && startDate.touched" class="text-danger">Başlangıç Tarihi gerekli.</div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="endDate">Bitiş Tarihi</label>
+            <input type="date" ngModel name="endDate" class="form-control" id="endDate"  #endDate="ngModel">
+            <div *ngIf="endDate.invalid && endDate.touched" class="text-danger">Bitiş Tarihi gerekli.</div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="competitionType">Yarışma Türü</label>
+            <select name="competitionType" ngModel class="form-control" id="competitionType"  #competitionType="ngModel">
+              <option value="" disabled selected>Tür Seçin</option>
+              <option value="nlpClassification">NLP classification</option>
+            </select>
+            <div *ngIf="competitionType.invalid && competitionType.touched" class="text-danger">Yarışma Türü gerekli.</div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="train">Test Dosyası( 2 Gişili bir test datası 1. giriş de text 2. girişde label)</label>
+            <label for="trainFile" class="form-control file-label">Dosya Seç</label>
+            <input type="file" class="form-control d-none" id="trainFile" (change)="selectTestFile($event)" required>
+            <div *ngIf="assignForm.submitted && !selectedTestFile" class="text-danger">Test Dosyası gerekli.</div>
+          </div>
+          <div *ngIf="selectedTestFile">
+            <h4>Seçilen Test Dosyası:</h4>
+            <ul>
+              <li *ngFor="let file of printTestFiles">
+                {{ file.name }} - {{ file.size }} bytes
+              </li>
+            </ul>
+          </div>
+          <div class="form-group mb-3">
+            <label for="assignment">Ödev Dosyası(Training için data-set veya Assign için Ekstra Dosya)</label>
+            <label for="assignmentFile" class="form-control file-label">Dosya Seç</label>
+            <input id="assignmentFile" class="form-control d-none" multiple type="file" (change)="selectFile($event)" >
+          </div>
+          <div *ngIf="selectedFiles && selectedFiles.length > 0">
+            <h4>Seçilen Ödev Dosyaları:</h4>
+            <ul>
+              <li *ngFor="let file of printFiles">
+                {{ file.name }} - {{ file.size }} bytes
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="currentFile" class="progress my-3">
+            <div
+              class="progress-bar progress-bar-info progress-bar-striped"
+              role="progressbar"
+              attr.aria-valuenow="{{ progress }}"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [ngStyle]="{ width: progress + '%' }"
+            >
+              {{ progress }}%
+            </div>
+          </div>
+          <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
+          <div class="container d-flex justify-content-center">
+            <button type="submit" class="btn btn-lg btn-primary" [disabled]="assignForm.invalid || !selectedTestFile ||  selectTestFile.length === 0">Assign Oluştur</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  
+  <ng-template #UpdateAssign>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Assign Güncelle</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #updateForm="ngForm" (ngSubmit)="update(updateForm)" novalidate>
+            <div class="form-group mb-3">
+              <label for="title">Başlık</label>
+              <input type="text" [(ngModel)]="data.title" name="title" class="form-control" id="title" required #updateTitle="ngModel">
+              <div *ngIf="updateTitle.invalid && updateTitle.touched" class="text-danger">Başlık gerekli.</div>
+            </div>
+            <div class="form-group mb-3">
+              <label for="subtitle">Alt Başlık</label>
+              <textarea name="subtitle" [(ngModel)]="data.subtitle" class="form-control" id="subtitle" rows="2" required #updateSubtitle="ngModel"></textarea>
+              <div *ngIf="updateSubtitle.invalid && updateSubtitle.touched" class="text-danger">Alt Başlık gerekli.</div>
+            </div>
+            <div class="form-group mb-3">
+              <label for="description">Açıklama</label>
+              <textarea name="description" [(ngModel)]="data.description" id="description" class="form-control" rows="5" required #updateDescription="ngModel"></textarea>
+              <div *ngIf="updateDescription.invalid && updateDescription.touched" class="text-danger">Açıklama gerekli.</div>
+            </div>
+            <div class="form-group mb-3">
+              <label for="startDate">Başlangıç Tarihi</label>
+              <input type="date" [(ngModel)]="data.startDate" name="startDate" class="form-control" id="startDate" required #updateStartDate="ngModel">
+              <div *ngIf="updateStartDate.invalid && updateStartDate.touched" class="text-danger">Başlangıç Tarihi gerekli.</div>
+            </div>
+            <div class="form-group mb-3">
+              <label for="endDate">Bitiş Tarihi</label>
+              <input type="date" [(ngModel)]="data.endDate" name="endDate" class="form-control" id="endDate" required #updateEndDate="ngModel">
+              <div *ngIf="updateEndDate.invalid && updateEndDate.touched" class="text-danger">Bitiş Tarihi gerekli.</div>
+            </div>
+            <div class="container d-flex justify-content-center">
+              <button type="submit" class="btn btn-lg btn-primary">Update Assign</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  

@@ -79,6 +79,11 @@ public class AuthenticationService {
                 .build()).collect(Collectors.toList());
     }
 
+    public User getUserByNo(String no) {
+        User user = userRepository.findBySchoolNo(no).orElseThrow();
+        return user;
+    }
+
     private Role getRole(String role){
         if(role.equals("user")){
             return  Role.USER;

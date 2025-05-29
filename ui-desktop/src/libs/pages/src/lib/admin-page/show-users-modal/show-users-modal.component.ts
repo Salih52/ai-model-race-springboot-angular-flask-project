@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserModel } from 'src/models/user';
 import { AssignService } from 'src/services/assign.service';
 import { VeriService } from 'src/services/auth.service';
@@ -12,8 +12,10 @@ import * as XLSX from 'xlsx';
 })
 export class ShowUsersModalComponent implements OnInit{
   users: UserModel[] = [];
+  filterText: string = '';
   constructor(
     private authService:VeriService,
+    private dialogref: MatDialogRef<ShowUsersModalComponent>,
   ) { }
 
   ngOnInit(): void {
@@ -22,6 +24,9 @@ export class ShowUsersModalComponent implements OnInit{
     });
   }
 
+  closeModal(){
+    this.dialogref.close();
+  }
   
   exportExcel(){
     const ws = XLSX.utils.json_to_sheet(this.users);

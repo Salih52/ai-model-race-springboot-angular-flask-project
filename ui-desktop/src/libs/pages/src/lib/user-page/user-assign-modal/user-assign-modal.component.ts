@@ -44,7 +44,6 @@ export class UserAssignModalComponent implements OnInit {
 
     this.assignService.getAssigns().subscribe((data) => {
       this.assigns = data.find((assign) => assign.title == assignName);
-      console.log(this.assigns);
       this.authService.user.subscribe((user) => {
         this.student = user;
         this.studentNo = this.student?.schoolNo ? this.student.schoolNo : '';
@@ -170,8 +169,8 @@ export class UserAssignModalComponent implements OnInit {
             },
             error: (err: any) => {
               console.log(err);
-              alert("Modelin Yüklenirken Bir Hata Oluştu")
-              window.location.reload();
+              alert(err.error.message);
+              location.reload();
               this.currentFile = undefined;
             },
             complete: () => {

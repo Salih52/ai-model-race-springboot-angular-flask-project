@@ -9,10 +9,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthInterceptor } from './auth.interceptor';
+import { UserFilterPipe } from './user-filter.pipe';
+import { AssignFilterPipe } from './assign-filter.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +33,6 @@ import { AuthInterceptor } from './auth.interceptor';
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

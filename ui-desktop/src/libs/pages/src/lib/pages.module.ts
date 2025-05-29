@@ -18,6 +18,11 @@ import { AssignPageComponent } from './all-assigns-page/assign-page/assign-page.
 import { ResultsPageComponent } from './all-assigns-page/assign-page/results-page/results-page.component';
 import { ShowUsersModalComponent } from './admin-page/show-users-modal/show-users-modal.component';
 import { PreProcessComponent } from './user-page/user-assign-modal/pre-process/pre-process.component';
+import { ImageAssignComponent } from './admin-page/image-assign/image-assign.component';
+import { UserProfilePageComponent } from './admin-page/user-profile-page/user-profile-page.component';
+import { UserFilterPipe } from 'src/app/user-filter.pipe';
+import { AssignFilterPipe } from 'src/app/assign-filter.pipe';
+import { NglAssignComponent } from './admin-page/ngl-assign/ngl-assign.component';
 
 
 
@@ -40,6 +45,11 @@ import { PreProcessComponent } from './user-page/user-assign-modal/pre-process/p
     ResultsPageComponent,
     ShowUsersModalComponent,
     PreProcessComponent,
+    ImageAssignComponent,
+    UserProfilePageComponent,
+    UserFilterPipe,
+    AssignFilterPipe,
+    NglAssignComponent
   ],
   imports: [
     FormsModule,

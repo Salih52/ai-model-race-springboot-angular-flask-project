@@ -34,6 +34,18 @@ export class AssignModalComponent  implements OnInit{
         error => console.error('Hata:',error)
       );
     }
+    else if(this.data.assigns.competitionType == "deepLearning"){
+      this.assignSerice.getDeepLearningScoreList(this.data.assigns.title).subscribe(
+        data => this.scoreList = data,
+        error => console.error('Hata:',error)
+      );
+    }
+    else if(this.data.assigns.competitionType == "nlpClassification"){
+      this.assignSerice.getDeepLearningScoreList(this.data.assigns.title).subscribe(
+        data => this.scoreList = data,
+        error => console.error('Hata:',error)
+      );
+    } 
   }
 
   exportExcel(){

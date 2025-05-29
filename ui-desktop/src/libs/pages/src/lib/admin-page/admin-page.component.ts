@@ -12,6 +12,8 @@ import { AssignModalComponent } from './admin-assign-modal/assign-modal/assign-m
 import { AdminAssignModalComponent } from './admin-assign-modal/admin-assign-modal.component';
 import { UserModel } from 'src/models/user';
 import { ShowUsersModalComponent } from './show-users-modal/show-users-modal.component';
+import { ImageAssignComponent } from './image-assign/image-assign.component';
+import { NglAssignComponent } from './ngl-assign/ngl-assign.component';
 
 @Component({
   selector: 'app-admin-page',
@@ -37,6 +39,20 @@ export class AdminPageComponent implements OnInit{
 
   newAssign(){
     this.dialogRef.open(NewAssignComponent ,{
+      width:'850px',
+      height:'600px'
+    })
+  }
+
+  newImageAssign(){
+    this.dialogRef.open(ImageAssignComponent ,{
+      width:'850px',
+      height:'600px'
+    })
+  }
+
+  newNglAssign(){
+    this.dialogRef.open(NglAssignComponent ,{
       width:'850px',
       height:'600px'
     })
@@ -74,8 +90,8 @@ export class AdminPageComponent implements OnInit{
     this.authService.getAllUsers().subscribe(data => {
       this.users = data;
       this.dialogRef.open(ShowUsersModalComponent ,{
-        width:'800px',
-        height:'500px'
+        width:'900px',
+        height:'600px'
       })
     });
   }

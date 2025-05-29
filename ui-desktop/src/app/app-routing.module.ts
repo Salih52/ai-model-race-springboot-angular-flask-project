@@ -11,6 +11,7 @@ import { AdminAssignModalComponent } from 'src/libs/pages/src/lib/admin-page/adm
 import { UserAssignModalComponent } from 'src/libs/pages/src/lib/user-page/user-assign-modal/user-assign-modal.component';
 import { AllAssignsPageComponent } from 'src/libs/pages/src/lib/all-assigns-page/all-assigns-page.component';
 import { AssignPageComponent } from 'src/libs/pages/src/lib/all-assigns-page/assign-page/assign-page.component';
+import { UserProfilePageComponent } from 'src/libs/pages/src/lib/admin-page/user-profile-page/user-profile-page.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'mainPage', component: MainPageComponent},
   {path: 'userPage/:assignName', component:UserAssignModalComponent, canActivate: [AuthGuard]},
   {path: 'admin/:assignName', component:AdminAssignModalComponent , canActivate: [AuthGuard]},
+  {path:'admin/users/:userNo',component:UserProfilePageComponent, canActivate: [AuthGuard]},
   {path:'assigns' , component:AllAssignsPageComponent},
   {path:'assigns/:assignName' , component:AssignPageComponent},
   { path: '', redirectTo: '/mainPage', pathMatch: 'full' }

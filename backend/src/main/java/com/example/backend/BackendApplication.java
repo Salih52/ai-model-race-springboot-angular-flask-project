@@ -9,12 +9,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 
 import static com.example.backend.user.Role.ADMIN;
 import static com.example.backend.user.Role.USER;
 
 @SpringBootApplication
+@EnableAsync
 public class BackendApplication implements CommandLineRunner {
 	@Resource
 	FileStorageService fileStorageService;
@@ -33,6 +35,7 @@ public class BackendApplication implements CommandLineRunner {
 					.lastName("Admin")
 					.email("admin@mail.com")
 					.password("adminailab987")
+					.schoolNo("111")
 					.role(ADMIN)
 					.build();
 			System.out.println("Admin token: " + service.register(admin).getAccessToken());

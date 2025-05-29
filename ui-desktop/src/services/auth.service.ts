@@ -51,6 +51,10 @@ export class VeriService {
     return this.http.get<UserModel[]>(`${this.url}auth/getUsers`);
   }
 
+  public getUserByNo(userNo: string) {
+    return this.http.get<UserModel>(`${this.url}auth/getUserByNo/${userNo}`);
+  }
+
   logout() {
     this.cookieService.delete('jwtToken');
     this.router.navigate(['/login']).then(() => {

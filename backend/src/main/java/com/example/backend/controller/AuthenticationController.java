@@ -5,6 +5,7 @@ import com.example.backend.dto.AuthenticationResponse;
 import com.example.backend.dto.UserDto;
 import com.example.backend.services.AuthenticationService;
 import com.example.backend.dto.RegisterRequest;
+import com.example.backend.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -50,5 +51,9 @@ public class AuthenticationController {
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = service.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+    @GetMapping("/getUserByNo/{no}")
+    public ResponseEntity<User> getUserByNo(@PathVariable("no") String no) {
+        return ResponseEntity.ok(service.getUserByNo(no));
     }
 }

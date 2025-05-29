@@ -30,6 +30,18 @@
       >
         <h2 class="text-info">Yarişma Türü: Regresyon</h2>
       </div>
+      <div
+        class="d-flex justify-content-center"
+        *ngIf="assigns?.competitionType == 'deepLearning'"
+      >
+        <h2 class="text-info">Yarişma Türü: Görüntü İşleme</h2>
+      </div>
+      <div
+        class="d-flex justify-content-center"
+        *ngIf="assigns?.competitionType == 'nlpClassification'"
+      >
+        <h2 class="text-info">Yarişma Türü: nlpClassification</h2>
+      </div>
     </div>
     <div class="card-body">
       <h2>{{ assigns.subtitle }}</h2>
@@ -97,7 +109,7 @@
 
     <div *ngIf="fileInfos" class="card mt-5">
       <div class="card-body">
-        <h3 class="card-title">Yuklediğin Modelff</h3>
+        <h3 class="card-title">Yuklediğin Model</h3>
         <ul class="list-group list-group-flush">
           <li *ngFor="let file of fileInfos" class="list-group-item">
             <button (click)="getModelFile(file.name)" class="btn btn-primary">

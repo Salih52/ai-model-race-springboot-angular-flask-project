@@ -12,7 +12,7 @@ export class FileService {
 
   constructor(private http:HttpClient) { }
 
-  upload(testFile: FileList, title: string, file?: FileList): Observable<HttpEvent<any>> {
+  upload(testFile: FileList, title: string, file?: FileList){
     console.log("odev: " + file, "test: " + testFile, "title: " + title);
     const formData: FormData = new FormData();
 
@@ -30,13 +30,29 @@ export class FileService {
 
     formData.append('title', title);
 
-    const req = new HttpRequest('POST', `${this.baseUrl}/uploadAdmin`, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
-
-    return this.http.request(req);
+    return this.http.post(`${this.baseUrl}/uploadAdmin`, formData);
 }
+
+  uploadImage(testFile:FileList , title: string ,file?: FileList) {
+    const formData: FormData = new FormData();
+
+    if (file && file.length > 0) {
+      for (let i = 0; i < file.length; i++) {
+        formData.append('file', file[i]);
+      }
+    }
+
+    if (testFile.length > 0) {
+      for (let i = 0; i < testFile.length; i++) {
+        formData.append('testFile', testFile[i]);
+      }
+    }
+
+    formData.append('title', title);
+
+
+    return this.http.post(`${this.baseUrl}/uploadImageAdmin`, formData);
+  }
 
   downloadFile(fileName: string, assignTitle: string): Observable<Blob> {
     const formData: FormData = new FormData();
@@ -59,7 +75,7 @@ export class FileService {
   }
 
 
-  uploadUser(file: FileList, title:string , assignTitle:string , preProcessCode:string): Observable<HttpEvent<any>> {
+  uploadUser(file: FileList, title:string , assignTitle:string , preProcessCode:string){
     const formData: FormData = new FormData();
 
     if(file.length > 0){
@@ -68,16 +84,15 @@ export class FileService {
       }
     }
 
+    if(preProcessCode==null){
+      preProcessCode = "";
+    }
+
     formData.append('title', title);
     formData.append('assignTitle', assignTitle);
     formData.append('preProcessCode', preProcessCode);
 
-    const req = new HttpRequest('POST', `${this.baseUrl}/uploadUser`, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
-
-    return this.http.request(req);
+    return this.http.post(`${this.baseUrl}/uploadUser`, formData);
   }
 
   getFilesUser(fileName: string, assignTitle:string): Observable<FileModel[]> {

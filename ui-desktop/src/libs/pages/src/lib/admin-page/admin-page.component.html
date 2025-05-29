@@ -11,7 +11,16 @@
     <!-- bazı yarışma örnekleri -->
     <div class="container">
       <div class="buttons">
-        <button class="btn btn-warning" (click)="newAssign()">Yarışma Oluştur</button>
+        <div class="dropdown">
+          <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Yarışma Oluştur
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><button class="dropdown-item" (click)="newImageAssign()">Görüntü İşleme</button></li>
+            <li><button class="dropdown-item btn btn-primary" (click)="newAssign()">Veri Sınıflandırma</button></li>
+            <li><button class="dropdown-item btn btn-primary" (click)="newNglAssign()">NLP</button></li>
+          </ul>
+        </div>
         <button class="btn ml-3 btn-info" (click)="showUsers()">Kullanıcıları Görüntüle</button>
       </div>
       <div class="row justify-content-center" *ngIf="assigns.length > 0; else noAssign">

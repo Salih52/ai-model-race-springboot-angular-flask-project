@@ -16,6 +16,12 @@
             <div class="d-flex justify-content-center" *ngIf="assign?.competitionType == 'regression' ">
                 <h2  class="text-info">Yarişma Türü: Regresyon</h2>
             </div>
+            <div class="d-flex justify-content-center" *ngIf="assign?.competitionType == 'deepLearning' ">
+                <h2  class="text-info">Yarişma Türü: Görüntü İşleme</h2>
+            </div>
+            <div class="d-flex justify-content-center" *ngIf="assign?.competitionType == 'nlpClassification' ">
+                <h2  class="text-info">Yarişma Türü: nlpClassification</h2>
+            </div>
         </div>
         <div class="card-body">
             

@@ -43,9 +43,47 @@
       <tr *ngFor="let user of scoreList; let i = index">
         <td>{{ i + 1 }}</td>
         <td>{{ user.studentNo }}</td>
+        <td>{{ user.meanAbsoluteError }}</td>
+        <td>{{ user.meanSquaredError }}</td>
+        <td>{{ user.r2Score }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="data.assigns.competitionType == 'deepLearning'">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Öğrenci Nooo</th>
+        <th>Accuracy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of scoreList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ user.studentNo }}</td>
         <td>{{ user.accuracy }}</td>
-        <td>{{ user.f1Score }}</td>
-        <td>{{ user.precision }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="data.assigns.competitionType == 'nlpClassification'">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Öğrenci Nooo</th>
+        <th>Accuracy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of scoreList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ user.studentNo }}</td>
+        <td>{{ user.accuracy }}</td>
       </tr>
     </tbody>
   </table>

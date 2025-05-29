@@ -1,0 +1,175 @@
+<div class="container mt-5">
+  <!-- User General Information -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>Kullanıcı Bilgileri</h2>
+    </div>
+
+    <div class="container card-body">
+      <div class="row">
+        <div class="col" *ngIf="user">
+          <p><strong>Ad:</strong> {{ user.firstName }}</p>
+          <p><strong>Soyad:</strong> {{ user.lastName }}</p>
+          <p><strong>E-mail:</strong> {{ user.email }}</p>
+          <p><strong>Öğrenci No:</strong> {{ user.schoolNo }}</p>
+          <p><strong>Katıldığı Yarışma Sayısı:</strong>{{ assigns.length }}</p>
+        </div>
+
+        <div class="col">
+          <div>
+            <h3>
+              {{ userText }}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Assignments -->
+  <div id=" Assignments" class="assignments d-flex justify-content-center">
+    <!-- Competitions Participated -->
+    <div class="card mb-4 participated">
+      <div class="card-header bg-">
+        <h2 class="text-center">Katıldığı Yarışmalar</h2>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="filterText"
+          placeholder="Yarışma Ara.."
+        />
+      </div>
+      <div class="card-body" *ngIf="assigns.length > 0; else noCompetitions">
+        <ul
+          class="list-group"
+          *ngFor="let competition of assigns | assignFilter : filterText"
+        >
+          <li
+            class="list-group-item btn btn-outline-primary mt-2 text-white"
+            (click)="
+              viewResults(competition.title, competition.competitionType)
+            "
+          >
+            <h2>{{ competition.title }}</h2>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noCompetitions>
+        <p>Kullanıcı henüz hiçbir yarışmaya katılmamıştır.</p>
+      </ng-template>
+    </div>
+
+    <!-- Competition Results -->
+    <div class="card results mb-4" *ngIf="selectedCompetitionResults">
+      <div class="card-header text-center">
+        <h2>{{ selectedCompetitionTitle }} Sonuçları</h2>
+        <p *ngIf="selectedCompetitionType == 'classification'">
+          <strong>Yarışma Türü:</strong> Classification
+        </p>
+        <p *ngIf="selectedCompetitionType == 'regression'">
+          <strong>Yarışma Türü:</strong> Regression
+        </p>
+        <p *ngIf="selectedCompetitionType == 'deepLearning'">
+          <strong>Yarışma Türü:</strong> Image classification
+        </p>
+        <p *ngIf="selectedCompetitionType == 'nlpClassification'">
+          <strong>Yarışma Türü:</strong> Nlp classification
+        </p>
+        <p><strong>Yarışmaya Katılımcı Sayısı:</strong>{{ totalUser }}</p>
+      </div>
+      <div class="card-body text-center">
+        <div *ngIf="selectedCompetitionType == 'classification'">
+          <p><strong>Place:</strong> {{ selectedCompetitionResults.place }}</p>
+          <p>
+            <strong>Accuracy:</strong> {{ selectedCompetitionResults.accuracy }}
+          </p>
+          <p>
+            <strong>F1 Score:</strong> {{ selectedCompetitionResults.f1Score }}
+          </p>
+          <p>
+            <strong>Precision:</strong>
+            {{ selectedCompetitionResults.precision }}
+          </p>
+          <p>
+            <strong>Recall:</strong> {{ selectedCompetitionResults.recall }}
+          </p>
+          <div class="card-footer">
+            <h3 class="card-title">Kullanıcının Yüklediği Model</h3>
+            <ul class="list-group list-group-flush">
+              <li *ngFor="let file of fileInfos" class="list-group-item">
+                <button
+                  (click)="getModelFile(file.name)"
+                  class="btn btn-primary"
+                >
+                  {{ file.name }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div *ngIf="selectedCompetitionType == 'regression'">
+          <p><strong>Place:</strong> {{ selectedCompetitionResults.place }}</p>
+          <p>
+            <strong>Mean Absolute Error:</strong>
+            {{ selectedCompetitionResults.meanAbsoluteError }}
+          </p>
+          <p>
+            <strong>Mean Squared Error:</strong>
+            {{ selectedCompetitionResults.meanSquaredError }}
+          </p>
+          <p>
+            <strong>R-Squared:</strong> {{ selectedCompetitionResults.r2Score }}
+          </p>
+          <div class="card-footer">
+            <h3 class="card-title">Kullanıcının Yüklediği Model</h3>
+            <ul class="list-group list-group-flush">
+              <li *ngFor="let file of fileInfos" class="list-group-item">
+                <button
+                  (click)="getModelFile(file.name)"
+                  class="btn btn-primary"
+                >
+                  {{ file.name }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div *ngIf="selectedCompetitionType == 'deepLearning'">
+          <p><strong>Place:</strong> {{ selectedCompetitionResults.place }}</p>
+          <p>
+            <strong>Accuracy:</strong> {{ selectedCompetitionResults.accuracy }}
+          </p>
+          <h3 class="card-title">Kullanıcının Yüklediği Model</h3>
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let file of fileInfos" class="list-group-item">
+              <button (click)="getModelFile(file.name)" class="btn btn-primary">
+                {{ file.name }}
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="selectedCompetitionType == 'nlpClassification'">
+          <p><strong>Place:</strong> {{ selectedCompetitionResults.place }}</p>
+          <p>
+            <strong>Accuracy:</strong> {{ selectedCompetitionResults.accuracy }}
+          </p>
+          <div class="card-footer">
+            <h3 class="card-title">Kullanıcının Yüklediği Model</h3>
+            <ul class="list-group list-group-flush">
+              <li *ngFor="let file of fileInfos" class="list-group-item">
+                <button
+                  (click)="getModelFile(file.name)"
+                  class="btn btn-primary"
+                >
+                  {{ file.name }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
